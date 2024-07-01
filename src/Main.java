@@ -12,6 +12,5 @@ public class Main {
         Manager manager = new Manager(collectionManager);
         ConsoleUI consoleUI = new ConsoleUI(manager);
         consoleUI.start();
-
     }
 }
