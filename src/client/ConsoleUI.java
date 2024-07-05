@@ -1,125 +1,93 @@
 package client;
 
 import manager.Manager;
+import validator.ConsoleValidator;
 import validator.ValidationResult;
-import validator.Validator;
 
-import java.util.Scanner;
-
-import static client.MessagesForUser.*;
+import static messages.UserMessages.ENTER_COMMAND;
+import static messages.UserMessages.NO_SUCH_COMMAND;
 
 public class ConsoleUI {
-    private final Scanner console;
     private final Manager manager;
-    private final Reader reader;
-    private final Validator validator;
+    private final ConsoleReader consoleReader;
     private String command;
     private String arg;
 
     public ConsoleUI(Manager manager) {
         this.manager = manager;
-        this.console = new Scanner(System.in);
-        this.reader = new Reader(console);
+        this.consoleReader = new ConsoleReader();
         this.command = "";
         this.arg = "";
-        this.validator = new Validator();
     }
 
     public void start() {
         String request;
         while (true) {
-            sleep();
             showMessage(ENTER_COMMAND);
-            request = console.nextLine().toLowerCase().trim();
+            request = consoleReader.readRequest();
             fillCommand(request);
-
-            if (!hasArgument()) {
+            if (arg == null) {
                 switch (command) {
                     case "help" -> {
-                        manager.help();
-                        showMessage(manager.getResponse());
+                        showMessage(manager.help());
                     }
                     case "info" -> {
-                        manager.info();
-                        showMessage(manager.getResponse());
+                        showMessage(manager.info());
                     }
                     case "show" -> {
-                        manager.show();
-                        showMessage(manager.getResponse());
+                        showMessage(manager.show());
                     }
                     case "exit" -> {
-                        manager.exit();
-                        showMessage(manager.getResponse());
+                        showMessage(manager.exit());
                         return;
                     }
                     case "add" -> {
-                        manager.add(reader.createBand());
-                        showMessage(manager.getResponse());
+                        showMessage(manager.add(consoleReader.createBand()));
                     }
                     case "clear" -> {
-                        manager.clear();
-                        showMessage(manager.getResponse());
+                        showMessage(manager.clear());
                     }
                     case "history" -> {
-                        manager.history();
-                        showMessage(manager.getResponse());
+                        showMessage(manager.history());
                     }
                     case "add_if_min" -> {
-                        manager.addIfMin(reader.createBand());
-                        showMessage(manager.getResponse());
+                        showMessage(manager.addIfMin(consoleReader.createBand()));
                     }
                     case "remove_lower" -> {
-                        manager.removeLower(reader.createBand());
-                        showMessage(manager.getResponse());
+                        showMessage(manager.removeLower(consoleReader.createBand()));
                     }
                     case "min_by_best_album" -> {
-                        manager.minByBestAlbum();
-                        showMessage(manager.getResponse());
+                        showMessage(manager.minByBestAlbum());
                     }
                     case "filter_by_best_album" -> {
-                        manager.filterByBestAlbum(reader.readBestAlbum());
-                        showMessage(manager.getResponse());
+                        showMessage(manager.filterByBestAlbum(consoleReader.readBestAlbum()));
                     }
                     case "print_field_asc_best_album" -> {
-                        manager.printFieldAscBestAlbum();
-                        showMessage(manager.getResponse());
+                        showMessage(manager.printFieldAscBestAlbum());
                     }
                     default -> {
-                        showMessage(NOT_SUCH_COMMAND);
+                        showMessage(NO_SUCH_COMMAND);
                     }
                 }
             } else {
-                if (isCorrectArg()) {
+                ValidationResult validationResult = new ConsoleValidator().isCorrectArg(arg);
+                if (validationResult.isValid()) {
                     switch (command) {
                         case "update" -> {
-                            manager.updateById(reader.createBand(), Integer.parseInt(arg));
-                            showMessage(manager.getResponse());
+                            showMessage(manager.updateById(consoleReader.createBand(), Integer.parseInt(arg)));
                         }
                         case "remove" -> {
-                            manager.removeById(Integer.parseInt(arg));
-                            showMessage(manager.getResponse());
+                            showMessage(manager.removeById(Integer.parseInt(arg)));
                         }
                         default -> {
-                            showMessage(NOT_SUCH_COMMAND);
+                            showMessage(NO_SUCH_COMMAND);
                         }
                     }
                 } else {
-                    showMessage(INCORRECT_ARG); // возможно добавить доб сообщения от валидатора
+                    showMessage(validationResult.getErrorMessage());
                 }
             }
-            sleep();
-
         }
-    }
-
-    private boolean isCorrectArg() {
-        validator.setStringInputData(arg);
-        ValidationResult validationResult = validator.isCorrectArg();
-        return validationResult.isCorrectData();
-    }
-
-    private boolean hasArgument() {
-        return arg != null;
     }
 
     private void fillCommand(String request) {
@@ -135,14 +103,6 @@ public class ConsoleUI {
 
     private void showMessage(String message) {
         System.out.println(message);
-    }
-
-    private void sleep() {
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            System.out.println("InterruptedException \n");
-        }
     }
 
 }

@@ -1,19 +1,17 @@
 package validator;
 
 public class ValidationResult {
-    private final boolean isCorrectData;
-    private final String message;
+    private final String errorMessage;
 
-    public ValidationResult(boolean isCorrectData,String message) {
-        this.isCorrectData = isCorrectData;
-        this.message = message;
+    public ValidationResult(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
-    public boolean isCorrectData() {
-        return isCorrectData;
+    public boolean isValid() {
+        return errorMessage == null;
     }
 
-    public String getMessage() {
-        return message;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }

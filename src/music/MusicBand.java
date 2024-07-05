@@ -1,19 +1,18 @@
 package music;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class MusicBand implements Comparable<MusicBand> {
 
     private static long globId;
-    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name; //Поле не может быть null, Строка не может быть пустой
-    private final java.time.LocalDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private int numberOfParticipants; //Поле не может быть null, Значение поля должно быть больше 0
-    private final java.time.LocalDate establishmentDate; //Поле может быть null
-    private MusicGenre genre; //Поле может быть null
-    private BestAlbum bestAlbum; //Поле не может быть null
+    private Long id;
+    private String name;
+    private final java.time.LocalDateTime creationDate;
+    private int numberOfParticipants;
+    private final java.time.LocalDate establishmentDate;
+    private MusicGenre genre;
+    private BestAlbum bestAlbum;
 
     public MusicBand() {
         this.id = ++globId;

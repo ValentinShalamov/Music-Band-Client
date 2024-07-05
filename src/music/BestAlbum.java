@@ -2,8 +2,8 @@ package music;
 
 public class BestAlbum {
 
-    private final String name; //Поле не может быть null, Строка не может быть пустой
-    private long sales; //Значение поля должно быть больше 0
+    private final String name;
+    private long sales;
 
     public BestAlbum(String name, long sales) {
         this.name = name;

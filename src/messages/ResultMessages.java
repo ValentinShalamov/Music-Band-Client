@@ -1,11 +1,11 @@
-package manager;
+package messages;
 
-public class MessagesByResults {
+public class ResultMessages {
     public static final String MUSIC_BAND_HAS_BEEN_ADDED_SUCCESSFUL = "The music band has been added successful \n";
     public static final String ADDITION_MISTAKE = "The music band hasn't been added, please, try again \n";
     public static final String EXIT_MESSAGE = "The program has been completed successfully \n";
     public static final String COLLECTION_IS_EMPTY = "The collection is empty \n";
-    public static final String NOT_SUCH_ID = "The music band hasn't been updated because of isn't such id \n";
+    public static final String NO_SUCH_ID = "The music band hasn't been updated because of isn't such id \n";
     public static final String NOT_SUCH_ELEMENTS = "There's not such elements \n";
     public static final String MUSIC_BAND_HAS_BEEN_UPDATED_SUCCESSFUL = "The music band has been updated successful \n";
     public static final String UPDATED_MISTAKE = "The music band hasn't been updated, please, try again \n";
@@ -35,5 +35,4 @@ public class MessagesByResults {
             "- filter_by_best_album: show the all music bands who have the sales of the best album equals will entered \n" +
             "- print_field_asc_best_album: show the all music bands in ascending order of sales of the best album \n";
 
-    private MessagesByResults() {}
 }
