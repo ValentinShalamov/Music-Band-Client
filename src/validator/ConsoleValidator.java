@@ -7,11 +7,8 @@ import static messages.ValidationMessages.*;
 public class ConsoleValidator {
 
     public ValidationResult isCorrectName(String name) {
-        if (name == null || name.isBlank()) {
+        if (isEmpty(name)) {
             return new ValidationResult(NAME_IS_EMPTY);
-        }
-        if (isInteger(name) || isDouble(name)) {
-            return new ValidationResult(NAME_IS_NUMBER);
         }
         if (name.length() > 50) {
             return new ValidationResult(NAME_IS_MORE_THAN_MAX);
@@ -20,7 +17,7 @@ public class ConsoleValidator {
     }
 
     public ValidationResult isCorrectNumberOfParticipants(String numberOfParticipants) {
-        if (numberOfParticipants == null || numberOfParticipants.isEmpty()) {
+        if (isEmpty(numberOfParticipants)) {
             return new ValidationResult(NUMBER_OF_PARTICIPANTS_IS_NULL);
         }
         if (!isInteger(numberOfParticipants)) {
@@ -36,7 +33,7 @@ public class ConsoleValidator {
     }
 
     public ValidationResult isCorrectGenre(String genre) {
-        if (genre == null || genre.isEmpty()) {
+        if (isEmpty(genre)) {
             return new ValidationResult(MUSIC_GENRE_MESSAGE);
         }
         if (isInteger(genre)) {
@@ -51,11 +48,8 @@ public class ConsoleValidator {
     }
 
     public ValidationResult isCorrectNameBestAlbum(String nameBestAlbum) {
-        if (nameBestAlbum == null || nameBestAlbum.isBlank()) {
+        if (isEmpty(nameBestAlbum)) {
             return new ValidationResult(BEST_ALBUM_IS_EMPTY);
-        }
-        if (isInteger(nameBestAlbum) || isDouble(nameBestAlbum)) {
-            return new ValidationResult(BEST_ALBUM_IS_NUMBER);
         }
         if (nameBestAlbum.length() > 50) {
             return new ValidationResult(BEST_ALBUM_MORE_THAN_MAX);
@@ -64,7 +58,7 @@ public class ConsoleValidator {
     }
 
     public ValidationResult isCorrectSalesBestAlbum(String salesBestAlbum) {
-        if (salesBestAlbum == null || salesBestAlbum.isEmpty()) {
+        if (isEmpty(salesBestAlbum)) {
             return new ValidationResult(BEST_ALBUM_SALES_IS_NULL);
         }
         if (!isLong(salesBestAlbum)) {
@@ -77,7 +71,7 @@ public class ConsoleValidator {
     }
 
     public ValidationResult isCorrectArg(String arg) {
-        if (arg == null || arg.isEmpty()) {
+        if (isEmpty(arg)) {
             return new ValidationResult(ARG_IS_EMPTY);
         }
         if (!isInteger(arg)) {
@@ -89,13 +83,8 @@ public class ConsoleValidator {
         return new ValidationResult(null);
     }
 
-    private boolean isDouble(String stringInputData) {
-        try {
-            Double.parseDouble(stringInputData);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    private boolean isEmpty(String str) {
+        return str == null || str.isBlank();
     }
 
     private boolean isLong(String stringInputData) {

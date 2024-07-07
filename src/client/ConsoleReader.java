@@ -13,15 +13,15 @@ import static messages.UserMessages.*;
 
 public class ConsoleReader {
     private ConsoleValidator consoleValidator;
-    private Scanner console;
+    private Scanner consoleScanner;
 
     public ConsoleReader() {
-        this.console = new Scanner(System.in);
+        this.consoleScanner = new Scanner(System.in);
         this.consoleValidator = new ConsoleValidator();
     }
 
     public String readRequest() {
-        return console.nextLine().toLowerCase().trim();
+        return consoleScanner.nextLine().toLowerCase().trim();
     }
 
     public MusicBand createBand() {
@@ -29,8 +29,8 @@ public class ConsoleReader {
         int numberOfParticipants = readNumberOfParticipants();
         MusicGenre genre = readMusicGenre();
         BestAlbum bestAlbum = readBestAlbum();
-        return new MusicBandBuilder().setName(bandName).setNumberOfParticipants(numberOfParticipants).
-                setGenre(genre).setBestAlbum(bestAlbum).build();
+        return new MusicBandBuilder().name(bandName).numberOfParticipants(numberOfParticipants).
+                genre(genre).bestAlbum(bestAlbum).build();
     }
 
     private String readName() {
@@ -38,7 +38,7 @@ public class ConsoleReader {
         String name = "";
         while (!validationResult.isValid()) {
             showMessage(ENTER_THE_NAME);
-            name = console.nextLine().trim();
+            name = consoleScanner.nextLine().trim();
             validationResult = consoleValidator.isCorrectName(name);
             printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
         }
@@ -50,7 +50,7 @@ public class ConsoleReader {
         String numberOfParticipants = "";
         while (!validationResult.isValid()) {
             showMessage(ENTER_NUMBER_OF_PARTICIPANTS);
-            numberOfParticipants = console.nextLine().trim();
+            numberOfParticipants = consoleScanner.nextLine().trim();
             validationResult = consoleValidator.isCorrectNumberOfParticipants(numberOfParticipants);
             printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
         }
@@ -62,7 +62,7 @@ public class ConsoleReader {
         String musicGenre = "";
         while (!validationResult.isValid()) {
             showMessage(ENTER_THE_GENRE_OF_MUSIC);
-            musicGenre = console.nextLine().toUpperCase().trim();
+            musicGenre = consoleScanner.nextLine().toUpperCase().trim();
             validationResult = consoleValidator.isCorrectGenre(musicGenre);
             printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
         }
@@ -75,7 +75,7 @@ public class ConsoleReader {
         String sales = "";
         while (!validationResult.isValid()) {
             showMessage(ENTER_NAME_OF_THE_BEST_ALBUM);
-            name = console.nextLine().trim();
+            name = consoleScanner.nextLine().trim();
             validationResult = consoleValidator.isCorrectNameBestAlbum(name);
             printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
         }
@@ -83,7 +83,7 @@ public class ConsoleReader {
         validationResult = new ValidationResult("");
         while (!validationResult.isValid()) {
             showMessage(ENTER_THE_SALES_OF_THE_BEST_ALBUM);
-            sales = console.nextLine().trim();
+            sales = consoleScanner.nextLine().trim();
             validationResult = consoleValidator.isCorrectSalesBestAlbum(sales);
             printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
         }

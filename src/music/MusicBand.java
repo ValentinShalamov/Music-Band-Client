@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class MusicBand implements Comparable<MusicBand> {
-
-    private static long globId;
     private Long id;
     private String name;
     private final java.time.LocalDateTime creationDate;
@@ -13,6 +11,8 @@ public class MusicBand implements Comparable<MusicBand> {
     private final java.time.LocalDate establishmentDate;
     private MusicGenre genre;
     private BestAlbum bestAlbum;
+
+    private static long globId;
 
     public MusicBand() {
         this.id = ++globId;

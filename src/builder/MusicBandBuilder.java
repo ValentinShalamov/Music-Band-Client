@@ -7,22 +7,22 @@ import music.MusicGenre;
 public class MusicBandBuilder {
     private final MusicBand musicBand = new MusicBand();
 
-    public MusicBandBuilder setName(String name) {
+    public MusicBandBuilder name(String name) {
         musicBand.setName(name);
         return this;
     }
 
-    public MusicBandBuilder setNumberOfParticipants(int numberOfParticipants) {
+    public MusicBandBuilder numberOfParticipants(int numberOfParticipants) {
         musicBand.setNumberOfParticipants(numberOfParticipants);
         return this;
     }
 
-    public MusicBandBuilder setGenre(MusicGenre genre) {
+    public MusicBandBuilder genre(MusicGenre genre) {
         musicBand.setGenre(genre);
         return this;
     }
 
-    public MusicBandBuilder setBestAlbum(BestAlbum bestAlbum) {
+    public MusicBandBuilder bestAlbum(BestAlbum bestAlbum) {
         musicBand.setBestAlbum(bestAlbum);
         return this;
     }
