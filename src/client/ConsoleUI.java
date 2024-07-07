@@ -28,7 +28,7 @@ public class ConsoleUI {
             fillCommand(request);
             if (arg == null) {
                 switch (command) {
-                    case "help" -> {
+                    case "help" ->  {
                         showMessage(manager.help());
                     }
                     case "info" -> {

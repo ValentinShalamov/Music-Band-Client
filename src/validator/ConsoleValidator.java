@@ -40,7 +40,7 @@ public class ConsoleValidator {
             return new ValidationResult(MUSIC_GENRE_MESSAGE);
         }
         for (MusicGenre musicGenre : MusicGenre.values()) {
-            if (genre.equals(musicGenre.name())) {
+            if (genre.equalsIgnoreCase(musicGenre.name())) {
                 return new ValidationResult(null);
             }
         }

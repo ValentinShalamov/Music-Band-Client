@@ -12,8 +12,8 @@ import java.util.Scanner;
 import static messages.UserMessages.*;
 
 public class ConsoleReader {
-    private ConsoleValidator consoleValidator;
-    private Scanner consoleScanner;
+    private final ConsoleValidator consoleValidator;
+    private final Scanner consoleScanner;
 
     public ConsoleReader() {
         this.consoleScanner = new Scanner(System.in);
