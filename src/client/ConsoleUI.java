@@ -1,11 +1,11 @@
 package client;
 
+import file.FileManager;
 import manager.Manager;
 import validator.ConsoleValidator;
 import validator.ValidationResult;
 
-import static messages.UserMessages.ENTER_COMMAND;
-import static messages.UserMessages.NO_SUCH_COMMAND;
+import static messages.UserMessages.*;
 
 public class ConsoleUI {
     private final Manager manager;
@@ -21,6 +21,7 @@ public class ConsoleUI {
     }
 
     public void start() {
+        initMusicBands();
         String request;
         while (true) {
             showMessage(ENTER_COMMAND);
@@ -65,6 +66,12 @@ public class ConsoleUI {
                     case "print_field_asc_best_album" -> {
                         showMessage(manager.printFieldAscBestAlbum());
                     }
+                    case "save" -> {
+                        showMessage(manager.save(consoleReader.readPath()));
+                    }
+                    case "execute_script" -> {
+                        showMessage(manager.executeScript(consoleReader.readPath()));
+                    }
                     default -> {
                         showMessage(NO_SUCH_COMMAND);
                     }
@@ -87,6 +94,16 @@ public class ConsoleUI {
                     showMessage(validationResult.getErrorMessage());
                 }
             }
+        }
+    }
+
+    private void initMusicBands() {
+        System.out.println(GREET_MESSAGE);
+        String env = System.getenv("PATH_TO_FILE_COLLECTION");
+        if (env != null) {
+            showMessage(manager.read(env));
+        } else {
+            showMessage(WORK_WITH_EMPTY_COLLECTION);
         }
     }
 

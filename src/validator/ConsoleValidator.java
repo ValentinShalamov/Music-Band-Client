@@ -83,6 +83,13 @@ public class ConsoleValidator {
         return new ValidationResult(null);
     }
 
+    public ValidationResult isCorrectPath(String path) {
+        if (isEmpty(path)) {
+            return new ValidationResult(PATH_IS_EMPTY);
+        }
+        return new ValidationResult(null);
+    }
+
     private boolean isEmpty(String str) {
         return str == null || str.isBlank();
     }

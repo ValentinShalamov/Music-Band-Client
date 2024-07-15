@@ -53,6 +53,10 @@ public class MusicBand implements Comparable<MusicBand> {
         this.id = id;
     }
 
+    public static void setGlobId(long id) {
+        globId = id;
+    }
+
     public static void clearGlobId() {
         globId = 0;
     }

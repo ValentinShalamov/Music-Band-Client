@@ -92,7 +92,7 @@ public class CollectionManager {
         return null;
     }
 
-    public String removeById(int id) {
+    public String removeById(long id) {
         addHistory(" - remove <id> \n");
         if (!hasId(id)) {
             return NO_SUCH_ID;
@@ -210,5 +210,16 @@ public class CollectionManager {
             builder.append("id = ").append(musicBand.getId()).append(", sales = ").append(musicBand.getBestAlbum().getSales()).append('\n');
         }
         return builder.toString();
+    }
+
+    public String readMusicBand(HashSet<MusicBand> anotherBand) {
+        musicBands.clear();
+        musicBands.addAll(anotherBand);
+        MusicBand.setGlobId(musicBands.size());
+        return COLLECTION_HAS_BEEN_READ;
+    }
+
+    public HashSet<MusicBand> getMusicBands() {
+        return musicBands;
     }
 }

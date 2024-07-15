@@ -1,13 +1,22 @@
 package manager;
 
+import com.google.gson.JsonSyntaxException;
+import file.FileManager;
+import file.FileReader;
 import music.BestAlbum;
 import music.MusicBand;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import static messages.ResultMessages.*;
+
 public class Manager {
     private final CollectionManager collectionManager;
+    private final FileManager fileManager;
 
-    public Manager(CollectionManager collectionManager) {
+    public Manager(CollectionManager collectionManager, FileManager fileManager) {
         this.collectionManager = collectionManager;
+        this.fileManager = fileManager;
     }
 
     public String help() {
@@ -64,5 +73,41 @@ public class Manager {
 
     public String printFieldAscBestAlbum() {
         return collectionManager.printFieldAscBestAlbum();
+    }
+
+    public String save(String path) {
+        try {
+            return fileManager.save(path);
+        } catch (IOException ex) {
+            return SAVING_MISTAKE;
+        } catch (SecurityException e) {
+            return e.getMessage();
+        }
+    }
+
+    public String read(String fileName) {
+        try {
+            return collectionManager.readMusicBand(fileManager.read(fileName));
+        } catch (FileNotFoundException e) {
+            return NO_SUCH_FILE;
+        } catch (JsonSyntaxException e) {
+            return FILE_CONTENT_INCORRECT;
+        } catch (IOException e) {
+            return FILE_READER_MISTAKE;
+        } catch (SecurityException | NullPointerException e) {
+            return e.getMessage();
+        }
+    }
+
+    public String executeScript(String path) {
+        try {
+            return fileManager.executeScript(path);
+        } catch (FileNotFoundException e) {
+            return NO_SUCH_FILE;
+        } catch (IOException e) {
+            return FILE_READER_MISTAKE;
+        } catch (SecurityException | NullPointerException e) {
+            return e.getMessage();
+        }
     }
 }

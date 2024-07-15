@@ -90,6 +90,18 @@ public class ConsoleReader {
         return new BestAlbum(name, Long.parseLong(sales));
     }
 
+    public String readPath() {
+        ValidationResult validationResult = new ValidationResult("");
+        String path = "";
+        while (!validationResult.isValid()) {
+            showMessage(ENTER_PATH);
+            path = consoleScanner.nextLine().trim();
+            validationResult = consoleValidator.isCorrectPath(path);
+            printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
+        }
+        return path;
+    }
+
     private void showMessage(String message) {
         System.out.println(message);
     }

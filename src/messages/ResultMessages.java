@@ -18,21 +18,35 @@ public class ResultMessages {
     public static final String CANNOT_ADD_ELEM_IN_EMPTY_COLLECTION = "You can't add the band with min of the sales until" +
             " the collection is empty \n";
     public static final String ALL_ELEMENT_BIGGER = "The all music bands has sales bigger than the entered \n";
+    public static final String COLLECTION_HAS_BEEN_READ = "The music band from the files has been read successful \n";
+    public static final String NO_SUCH_FILE = "There's not such file \n";
+    public static final String FILE_READER_MISTAKE = "The file hasn't been read, please, try again \n";
+    public static final String FILE_IS_NULL = "The file is empty \n";
+    public static final String SAVING_MISTAKE = "The collection of music bands haven't been saved in the file, please, try again \n";
+    public static final String FILE_CONTENT_INCORRECT = "The content of file isn't correct, check your file \n";
+    public static final String SAVING_SUCCESSFUL = "The collection has been added successful," +
+            "The path of the file : \n";
+    public static final String NOT_RIGHT_ACCESS_ON_WRITE = "You don't have a right access on write \n";
+    public static final String NOT_RIGHT_ACCESS_ON_READ = "You don't have a right access on read \n";
 
-    public static final String LIST_OF_AVAILABLE_COMMAND = "The list of available command: \n" +
-            "- help: show the list of available commands \n" +
-            "- info: show the information about music bands \n" +
-            "- show: show everything music bands \n" +
-            "- add: add a music band \n" +
-            "- update <id> : update the music band by its id \n" +
-            "- remove <id> : remove the music band by its id \n" +
-            "- clear: delete the all music bands \n" +
-            "- exit: stop the program \n " +
-            "- add_if_min: add a music band if its sales less than the min sales of the collection  \n" +
-            "- remove_lower: delete the all music bands which have the sales less than will entered \n" +
-            "- history: show last 12 commands \n " +
-            "- min_by_best_album: show any music band who have min sales of the best album \n" +
-            "- filter_by_best_album: show the all music bands who have the sales of the best album equals will entered \n" +
-            "- print_field_asc_best_album: show the all music bands in ascending order of sales of the best album \n";
+    public static final String LIST_OF_AVAILABLE_COMMAND = """
+            The list of available command:\s
+            - help: show the list of available commands\s
+            - info: show the information about music bands\s
+            - show: show everything music bands\s
+            - add: add a music band\s
+            - update <id> : update the music band by its id\s
+            - remove <id> : remove the music band by its id\s
+            - clear: delete the all music bands\s
+            - exit: stop the program\s
+            - add_if_min: add a music band if its sales less than the min sales of the collection \s
+            - remove_lower: delete the all music bands which have the sales less than will entered\s
+            - history: show last 12 commands\s
+            - min_by_best_album: show any music band who have min sales of the best album\s
+            - filter_by_best_album: show the all music bands who have the sales of the best album equals will entered\s
+            - print_field_asc_best_album: show the all music bands in ascending order of sales of the best album\s
+            - save : save the music bands in a file \s
+            - execute_script : run a script from a file \s
+            """;
 
 }

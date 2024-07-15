@@ -9,5 +9,10 @@ public class UserMessages {
     public static final String ENTER_NAME_OF_THE_BEST_ALBUM = "Enter a name of the best album: \n";
     public static final String ENTER_THE_SALES_OF_THE_BEST_ALBUM = "Enter the sales of the best album: \n";
     public static final String ENTER_COMMAND = "Enter a command: ";
+    public static final String ENTER_PATH = "Enter the path to file: ";
+    public static final String GREET_MESSAGE = "Hello, you are staying in program for work with music bands. \n" +
+            "You can start program with an empty collection or create an ENVIRONMENT VARIABLE and direct a path " +
+            "to file with a collection. \nYou need to create environment variable and called its PATH_TO_FILE_COLLECTION \n";
+    public static final String WORK_WITH_EMPTY_COLLECTION = "You start to work with an empty collection \n";
 
 }
