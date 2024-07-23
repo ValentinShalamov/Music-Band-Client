@@ -1,10 +1,11 @@
 package client;
 
-import file.FileManager;
+import exceptions.UserCancelledOperationException;
 import manager.Manager;
 import validator.ConsoleValidator;
 import validator.ValidationResult;
 
+import static messages.ResultMessages.PROGRAM_HAS_BEEN_COMPLETED;
 import static messages.UserMessages.*;
 
 public class ConsoleUI {
@@ -23,76 +24,49 @@ public class ConsoleUI {
     public void start() {
         initMusicBands();
         String request;
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            showMessage(PROGRAM_HAS_BEEN_COMPLETED);
+            showMessage(manager.save("AUTOSAVE"));
+        }));
         while (true) {
-            showMessage(ENTER_COMMAND);
-            request = consoleReader.readRequest();
-            fillCommand(request);
-            if (arg == null) {
-                switch (command) {
-                    case "help" ->  {
-                        showMessage(manager.help());
-                    }
-                    case "info" -> {
-                        showMessage(manager.info());
-                    }
-                    case "show" -> {
-                        showMessage(manager.show());
-                    }
-                    case "exit" -> {
-                        showMessage(manager.exit());
-                        return;
-                    }
-                    case "add" -> {
-                        showMessage(manager.add(consoleReader.createBand()));
-                    }
-                    case "clear" -> {
-                        showMessage(manager.clear());
-                    }
-                    case "history" -> {
-                        showMessage(manager.history());
-                    }
-                    case "add_if_min" -> {
-                        showMessage(manager.addIfMin(consoleReader.createBand()));
-                    }
-                    case "remove_lower" -> {
-                        showMessage(manager.removeLower(consoleReader.createBand()));
-                    }
-                    case "min_by_best_album" -> {
-                        showMessage(manager.minByBestAlbum());
-                    }
-                    case "filter_by_best_album" -> {
-                        showMessage(manager.filterByBestAlbum(consoleReader.readBestAlbum()));
-                    }
-                    case "print_field_asc_best_album" -> {
-                        showMessage(manager.printFieldAscBestAlbum());
-                    }
-                    case "save" -> {
-                        showMessage(manager.save(consoleReader.readPath()));
-                    }
-                    case "execute_script" -> {
-                        showMessage(manager.executeScript(consoleReader.readPath()));
-                    }
-                    default -> {
-                        showMessage(NO_SUCH_COMMAND);
-                    }
-                }
-            } else {
-                ValidationResult validationResult = new ConsoleValidator().isCorrectArg(arg);
-                if (validationResult.isValid()) {
+            try {
+                showMessage(ENTER_COMMAND);
+                request = consoleReader.readRequest();
+                fillCommand(request.toLowerCase());
+                if (arg == null) {
                     switch (command) {
-                        case "update" -> {
-                            showMessage(manager.updateById(consoleReader.createBand(), Integer.parseInt(arg)));
+                        case "help" -> showMessage(manager.help());
+                        case "info" -> showMessage(manager.info());
+                        case "show" -> showMessage(manager.show());
+                        case "exit" -> {
+                            return;
                         }
-                        case "remove" -> {
-                            showMessage(manager.removeById(Integer.parseInt(arg)));
-                        }
-                        default -> {
-                            showMessage(NO_SUCH_COMMAND);
-                        }
+                        case "add" -> showMessage(manager.add(consoleReader.createBand()));
+                        case "clear" -> showMessage(manager.clear());
+                        case "history" -> showMessage(manager.history());
+                        case "add_if_min" -> showMessage(manager.addIfMin(consoleReader.createBand()));
+                        case "min_by_best_album" -> showMessage(manager.minByBestAlbum());
+                        case "filter_by_best_album" -> showMessage(manager.filterByBestAlbum(consoleReader.readBestAlbum()));
+                        case "print_field_asc_best_album" -> showMessage(manager.printFieldAscBestAlbum());
+                        case "save" -> showMessage(manager.save(consoleReader.readPath()));
+                        case "execute_script" -> showMessage(manager.executeScript(consoleReader.readPath()));
+                        default -> showMessage(NO_SUCH_COMMAND);
                     }
                 } else {
-                    showMessage(validationResult.getErrorMessage());
+                    ValidationResult validationResult = new ConsoleValidator().isCorrectArg(arg);
+                    if (validationResult.isValid()) {
+                        switch (command) {
+                            case "update" -> showMessage(manager.updateById(consoleReader.createBand(), Integer.parseInt(arg)));
+                            case "remove" -> showMessage(manager.removeById(Integer.parseInt(arg)));
+                            case "remove_lower" -> showMessage(manager.removeLower(Long.parseLong(arg)));
+                            default -> showMessage(NO_SUCH_COMMAND);
+                        }
+                    } else {
+                        showMessage(validationResult.getErrorMessage());
+                    }
                 }
+            } catch (UserCancelledOperationException e) {
+                showMessage(e.getMessage());
             }
         }
     }

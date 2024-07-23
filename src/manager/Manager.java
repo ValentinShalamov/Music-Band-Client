@@ -1,8 +1,8 @@
 package manager;
 
 import com.google.gson.JsonSyntaxException;
+import exceptions.EmptyFileException;
 import file.FileManager;
-import file.FileReader;
 import music.BestAlbum;
 import music.MusicBand;
 
@@ -25,10 +25,6 @@ public class Manager {
 
     public String info() {
         return collectionManager.info();
-    }
-
-    public String exit() {
-        return collectionManager.exit();
     }
 
     public String show() {
@@ -59,8 +55,8 @@ public class Manager {
         return collectionManager.addIfMin(musicBand);
     }
 
-    public String removeLower(MusicBand musicBand) {
-        return collectionManager.removeLower(musicBand);
+    public String removeLower(long sales) {
+        return collectionManager.removeLower(sales);
     }
 
     public String minByBestAlbum() {
@@ -88,14 +84,12 @@ public class Manager {
     public String read(String fileName) {
         try {
             return collectionManager.readMusicBand(fileManager.read(fileName));
-        } catch (FileNotFoundException e) {
-            return NO_SUCH_FILE;
+        } catch (FileNotFoundException | SecurityException | EmptyFileException e) {
+            return e.getMessage();
         } catch (JsonSyntaxException e) {
             return FILE_CONTENT_INCORRECT;
         } catch (IOException e) {
             return FILE_READER_MISTAKE;
-        } catch (SecurityException | NullPointerException e) {
-            return e.getMessage();
         }
     }
 
@@ -106,7 +100,7 @@ public class Manager {
             return NO_SUCH_FILE;
         } catch (IOException e) {
             return FILE_READER_MISTAKE;
-        } catch (SecurityException | NullPointerException e) {
+        } catch (SecurityException | EmptyFileException e) {
             return e.getMessage();
         }
     }

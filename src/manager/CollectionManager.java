@@ -10,11 +10,11 @@ import java.util.*;
 import static messages.ResultMessages.*;
 
 public class CollectionManager {
-    private final HashSet<MusicBand> musicBands;
+    private final Set<MusicBand> musicBands;
     private final LocalDateTime localDateTime;
     private final ArrayDeque<String> history;
 
-    public CollectionManager(HashSet<MusicBand> musicBands) {
+    public CollectionManager(Set<MusicBand> musicBands) {
         this.musicBands = musicBands;
         this.localDateTime = LocalDateTime.now();
         this.history = new ArrayDeque<>();
@@ -40,10 +40,6 @@ public class CollectionManager {
         return typeCollection + countElements + dateInit;
     }
 
-    public String exit() {
-        return EXIT_MESSAGE;
-    }
-
     public String show() {
         addHistory(" - show \n");
         if (musicBands.isEmpty()) {
@@ -65,49 +61,31 @@ public class CollectionManager {
         }
     }
 
-    private boolean hasId(long id) {
-        for (MusicBand musicBand : musicBands) {
-            if (musicBand.getId() == id) return true;
-        }
-        return false;
-    }
-
     public String updateById(MusicBand musicBand, long id) {
         addHistory(" - update <id> \n");
         MusicBand.decId();
-        if (!hasId(id)) {
-            return NO_SUCH_ID;
-        }
         for (MusicBand band : musicBands) {
             if (band.getId() == id) {
-                musicBands.remove(band);
                 musicBand.setId(id);
                 if (musicBands.add(musicBand)) {
+                    musicBands.remove(band);
                     return MUSIC_BAND_HAS_BEEN_UPDATED_SUCCESSFUL;
                 } else {
                     return UPDATED_MISTAKE;
                 }
             }
         }
-        return null;
+        return NO_SUCH_ID;
     }
 
     public String removeById(long id) {
         addHistory(" - remove <id> \n");
-        if (!hasId(id)) {
-            return NO_SUCH_ID;
+        if (musicBands.removeIf((band) -> band.getId() == id)) {
+            MusicBand.decId();
+            return MUSIC_BAND_HAS_BEEN_DELETED_SUCCESSFUL;
+        } else {
+            return DELETED_MISTAKE;
         }
-        for (MusicBand musicBand : musicBands) {
-            if (musicBand.getId() == id) {
-                if (musicBands.remove(musicBand)) {
-                    MusicBand.decId();
-                    return MUSIC_BAND_HAS_BEEN_DELETED_SUCCESSFUL;
-                } else {
-                    return DELETED_MISTAKE;
-                }
-            }
-        }
-        return null;
     }
 
     public String clear() {
@@ -118,9 +96,14 @@ public class CollectionManager {
     }
 
     public String history() {
+        int count = 0;
         StringBuilder builder = new StringBuilder();
-        builder.append("last ");
         for (String s : history) {
+            if (count == 0 && s != null) {
+                builder.append(s).delete(s.length() - 2, s.length()).append(" - last command \n");
+                count++;
+                continue;
+            }
             if (s != null) {
                 builder.append(s);
             }
@@ -146,18 +129,16 @@ public class CollectionManager {
         }
     }
 
-    public String removeLower(MusicBand musicBand) {
+    public String removeLower(long sales) {
         addHistory("- remove_lower \n");
         if (musicBands.isEmpty()) {
-            MusicBand.decId();
             return COLLECTION_IS_EMPTY;
         }
         long id;
         StringBuilder builder = new StringBuilder();
         HashSet<MusicBand> copyMusicBands = new HashSet<>(musicBands);
-
         for (MusicBand band : copyMusicBands) {
-            if (band.getBestAlbum().getSales() < musicBand.getBestAlbum().getSales()) {
+            if (band.getBestAlbum().getSales() < sales) {
                 id = band.getId();
                 if (musicBands.remove(band)) {
                     builder.append(MUSIC_BAND_HAS_BEEN_DELETED_SUCCESSFUL_ID).append(id).append('\n');
@@ -170,7 +151,7 @@ public class CollectionManager {
         if (builder.toString().isEmpty()) {
             return ALL_ELEMENT_BIGGER;
         }
-        return null;
+        return builder.toString();
     }
 
     public String minByBestAlbum() {
@@ -212,14 +193,18 @@ public class CollectionManager {
         return builder.toString();
     }
 
-    public String readMusicBand(HashSet<MusicBand> anotherBand) {
+    public String readMusicBand(Set<MusicBand> anotherBand) {
         musicBands.clear();
         musicBands.addAll(anotherBand);
-        MusicBand.setGlobId(musicBands.size());
+        MusicBand.setGlobId(anotherBand.stream()
+                .map(MusicBand::getId)
+                .max(Long::compare)
+                .orElse(0L));
         return COLLECTION_HAS_BEEN_READ;
     }
 
-    public HashSet<MusicBand> getMusicBands() {
-        return musicBands;
+    public Set<MusicBand> getMusicBands() {
+        return Collections.unmodifiableSet(musicBands);
     }
+
 }

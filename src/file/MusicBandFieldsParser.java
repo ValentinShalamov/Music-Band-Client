@@ -1,6 +1,7 @@
 package file;
 
 import builder.MusicBandBuilder;
+import exceptions.MusicBandParsingException;
 import music.BestAlbum;
 import music.MusicBand;
 import music.MusicGenre;
@@ -9,45 +10,45 @@ import validator.ValidationResult;
 
 import java.util.Scanner;
 
-public class FileReader {
+public class MusicBandFieldsParser {
 
     public MusicBand createBand(Scanner fileScanner) throws RuntimeException {
         return new MusicBandBuilder()
-                .name(readName(fileScanner.nextLine()))
-                .numberOfParticipants(readNumberOfParticipants(fileScanner.nextLine()))
-                .genre(readMusicGenre(fileScanner.nextLine()))
-                .bestAlbum(readBestAlbum(fileScanner))
+                .name(parseName(fileScanner.nextLine()))
+                .numberOfParticipants(parseNumberOfParticipants(fileScanner.nextLine()))
+                .genre(parseMusicGenre(fileScanner.nextLine()))
+                .bestAlbum(parseBestAlbum(fileScanner))
                 .build();
     }
 
-    private String readName(String name) throws RuntimeException {
+    private String parseName(String name) throws RuntimeException {
         ValidationResult validationResult = new ConsoleValidator().isCorrectName(name);
         if (validationResult.isValid()) {
             return name;
         } else {
-            throw new RuntimeException(validationResult.getErrorMessage());
+            throw new MusicBandParsingException(validationResult.getErrorMessage());
         }
     }
 
-    private int readNumberOfParticipants(String numberOfParticipants) throws RuntimeException {
+    private int parseNumberOfParticipants(String numberOfParticipants) throws RuntimeException {
         ValidationResult validationResult = new ConsoleValidator().isCorrectNumberOfParticipants(numberOfParticipants);
         if (validationResult.isValid()) {
             return Integer.parseInt(numberOfParticipants);
         } else {
-            throw new RuntimeException(validationResult.getErrorMessage());
+            throw new MusicBandParsingException(validationResult.getErrorMessage());
         }
     }
 
-    private MusicGenre readMusicGenre(String genre) throws RuntimeException {
+    private MusicGenre parseMusicGenre(String genre) throws RuntimeException {
         ValidationResult validationResult = new ConsoleValidator().isCorrectGenre(genre);
         if (validationResult.isValid()) {
             return MusicGenre.valueOf(genre.toUpperCase());
         } else {
-            throw new RuntimeException(validationResult.getErrorMessage());
+            throw new MusicBandParsingException(validationResult.getErrorMessage());
         }
     }
 
-    public BestAlbum readBestAlbum(Scanner fileScanner) throws RuntimeException {
+    public BestAlbum parseBestAlbum(Scanner fileScanner) throws RuntimeException {
         String name = fileScanner.nextLine();
         String sales = fileScanner.nextLine();
         ValidationResult validationResultName = new ConsoleValidator().isCorrectNameBestAlbum(name);
@@ -55,25 +56,34 @@ public class FileReader {
         if (validationResultName.isValid() && validationResultSales.isValid()) {
             return new BestAlbum(name, Long.parseLong(sales));
         } else {
-            throw new RuntimeException(validationResultName.getErrorMessage() + validationResultSales.getErrorMessage());
+            throw new MusicBandParsingException(validationResultName.getErrorMessage() + validationResultSales.getErrorMessage());
         }
     }
 
-    public String readPath(String path) throws RuntimeException {
+    public String parsePath(String path) throws RuntimeException {
         ValidationResult validationResult = new ConsoleValidator().isCorrectPath(path);
         if (validationResult.isValid()) {
             return path;
         } else {
-            throw new RuntimeException(validationResult.getErrorMessage());
+            throw new MusicBandParsingException(validationResult.getErrorMessage());
         }
     }
 
-    public long readId(String id) throws RuntimeException {
+    public long parseId(String id) throws RuntimeException {
         ValidationResult validationResult = new ConsoleValidator().isCorrectArg(id);
         if (validationResult.isValid()) {
             return Long.parseLong(id);
         } else {
-            throw new RuntimeException(validationResult.getErrorMessage());
+            throw new MusicBandParsingException(validationResult.getErrorMessage());
+        }
+    }
+
+    public long parseSales(String sales) throws RuntimeException {
+        ValidationResult validationResult = new ConsoleValidator().isCorrectSalesBestAlbum(sales);
+        if (validationResult.isValid()) {
+            return Long.parseLong(sales);
+        } else {
+            throw new MusicBandParsingException(validationResult.getErrorMessage());
         }
     }
 }

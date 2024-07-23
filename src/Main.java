@@ -1,11 +1,8 @@
-
 import client.ConsoleUI;
-import manager.CollectionManager;
 import file.FileManager;
+import manager.CollectionManager;
 import manager.Manager;
-
 import music.MusicBand;
-
 
 import java.util.HashSet;
 
