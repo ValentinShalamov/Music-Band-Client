@@ -19,7 +19,7 @@ public class ValidationMessages {
     public static final String BEST_ALBUM_SALES_IS_NOT_LONG = "The sales of the best album should be more than zero \n";
     public static final String BEST_ALBUM_SALES_LESS_THAN_ONE = "The sales of the best album should be more than zero \n";
     public static final String ARG_IS_EMPTY = "The argument of the command can't be empty \n";
-    public static final String ARG_IS_NUMBER = "The argument of the command can't be any number \n";
+    public static final String ARG_IS_NOT_CORRECT_NUMBER = "The argument of the command should be a number and can't be too much number \n";
     public static final String ARG_IS_LESS_THAN_ONE = "The argument of the command should be more than zero \n";
     public static final String PATH_IS_EMPTY = "The path to file can't be empty \n";
 

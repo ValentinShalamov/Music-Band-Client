@@ -115,7 +115,7 @@ public class CollectionManager {
         addHistory(" - add_if_min \n");
         if (musicBands.isEmpty()) {
             MusicBand.decId();
-            return CANNOT_ADD_ELEM_IN_EMPTY_COLLECTION;
+            return EMPTY_COLLECTION_MISTAKE;
         }
         if (musicBand.getBestAlbum().getSales() < Collections.min(musicBands).getBestAlbum().getSales()) {
             if (musicBands.add(musicBand)) {
@@ -174,9 +174,9 @@ public class CollectionManager {
             }
         }
         if (builder.toString().isEmpty()) {
-            return NOT_SUCH_ELEMENTS;
+            return NO_SUCH_ELEMENTS;
         }
-        return null;
+        return builder.toString();
     }
 
     public String printFieldAscBestAlbum() {

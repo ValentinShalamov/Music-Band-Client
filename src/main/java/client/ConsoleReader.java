@@ -10,8 +10,8 @@ import validator.ValidationResult;
 
 import java.util.Scanner;
 
+import static messages.ResultMessages.INTERRUPT_MESSAGE;
 import static messages.UserMessages.*;
-import static messages.ResultMessages.*;
 
 public class ConsoleReader {
     private final ConsoleValidator consoleValidator;

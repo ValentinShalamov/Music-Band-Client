@@ -74,10 +74,10 @@ public class ConsoleValidator {
         if (isEmpty(arg)) {
             return new ValidationResult(ARG_IS_EMPTY);
         }
-        if (!isInteger(arg)) {
-            return new ValidationResult(ARG_IS_NUMBER);
+        if (!isLong(arg)) {
+            return new ValidationResult(ARG_IS_NOT_CORRECT_NUMBER);
         }
-        if (Integer.parseInt(arg) <= 0) {
+        if (Long.parseLong(arg) <= 0) {
             return new ValidationResult(ARG_IS_LESS_THAN_ONE);
         }
         return ValidationResult.OK;

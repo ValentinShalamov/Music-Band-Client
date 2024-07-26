@@ -13,6 +13,7 @@ public class ConsoleUI {
     private final ConsoleReader consoleReader;
     private String command;
     private String arg;
+    private final String AUTOSAVE_PATH = "AUTOSAVE.json";
 
     public ConsoleUI(Manager manager) {
         this.manager = manager;
@@ -26,7 +27,7 @@ public class ConsoleUI {
         String request;
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             showMessage(PROGRAM_HAS_BEEN_COMPLETED);
-            showMessage(manager.save("AUTOSAVE"));
+            showMessage(manager.save(AUTOSAVE_PATH));
         }));
         while (true) {
             try {
