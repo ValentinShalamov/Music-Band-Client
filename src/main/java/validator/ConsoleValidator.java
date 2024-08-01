@@ -13,7 +13,7 @@ public class ConsoleValidator {
         if (name.length() > 50) {
             return new ValidationResult(NAME_IS_MORE_THAN_MAX);
         }
-        return new ValidationResult(null);
+        return ValidationResult.OK;
     }
 
     public ValidationResult isCorrectNumberOfParticipants(String numberOfParticipants) {
@@ -29,7 +29,7 @@ public class ConsoleValidator {
         if (Integer.parseInt(numberOfParticipants) > 1000) {
             return new ValidationResult(NUMBER_OF_PARTICIPANTS_MORE_THAN_MAX);
         }
-        return new ValidationResult(null);
+        return ValidationResult.OK;
     }
 
     public ValidationResult isCorrectGenre(String genre) {
@@ -41,7 +41,7 @@ public class ConsoleValidator {
         }
         for (MusicGenre musicGenre : MusicGenre.values()) {
             if (genre.equalsIgnoreCase(musicGenre.name())) {
-                return new ValidationResult(null);
+                return ValidationResult.OK;
             }
         }
         return new ValidationResult(MUSIC_GENRE_MESSAGE);
@@ -54,7 +54,7 @@ public class ConsoleValidator {
         if (nameBestAlbum.length() > 50) {
             return new ValidationResult(BEST_ALBUM_MORE_THAN_MAX);
         }
-        return new ValidationResult(null);
+        return ValidationResult.OK;
     }
 
     public ValidationResult isCorrectSalesBestAlbum(String salesBestAlbum) {
@@ -67,20 +67,27 @@ public class ConsoleValidator {
         if (Long.parseLong(salesBestAlbum) <= 0) {
             return new ValidationResult(BEST_ALBUM_SALES_LESS_THAN_ONE);
         }
-        return new ValidationResult(null);
+        return ValidationResult.OK;
     }
 
     public ValidationResult isCorrectArg(String arg) {
         if (isEmpty(arg)) {
             return new ValidationResult(ARG_IS_EMPTY);
         }
-        if (!isInteger(arg)) {
-            return new ValidationResult(ARG_IS_NUMBER);
+        if (!isLong(arg)) {
+            return new ValidationResult(ARG_IS_NOT_CORRECT_NUMBER);
         }
-        if (Integer.parseInt(arg) <= 0) {
+        if (Long.parseLong(arg) <= 0) {
             return new ValidationResult(ARG_IS_LESS_THAN_ONE);
         }
-        return new ValidationResult(null);
+        return ValidationResult.OK;
+    }
+
+    public ValidationResult isCorrectPath(String path) {
+        if (isEmpty(path)) {
+            return new ValidationResult(PATH_IS_EMPTY);
+        }
+        return ValidationResult.OK;
     }
 
     private boolean isEmpty(String str) {

@@ -1,6 +1,7 @@
 package client;
 
 import builder.MusicBandBuilder;
+import exceptions.UserCancelledOperationException;
 import music.BestAlbum;
 import music.MusicBand;
 import music.MusicGenre;
@@ -9,6 +10,7 @@ import validator.ValidationResult;
 
 import java.util.Scanner;
 
+import static messages.ResultMessages.INTERRUPT_MESSAGE;
 import static messages.UserMessages.*;
 
 public class ConsoleReader {
@@ -21,7 +23,15 @@ public class ConsoleReader {
     }
 
     public String readRequest() {
-        return consoleScanner.nextLine().toLowerCase().trim();
+        if (!consoleScanner.hasNextLine()) {
+            return "exit";
+        }
+        String string = consoleScanner.nextLine().trim();
+        if (!string.equalsIgnoreCase("q")) {
+            return string;
+        } else {
+            throw new UserCancelledOperationException(INTERRUPT_MESSAGE);
+        }
     }
 
     public MusicBand createBand() {
@@ -38,9 +48,9 @@ public class ConsoleReader {
         String name = "";
         while (!validationResult.isValid()) {
             showMessage(ENTER_THE_NAME);
-            name = consoleScanner.nextLine().trim();
+            name = readRequest();
             validationResult = consoleValidator.isCorrectName(name);
-            printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
+            printIfNotCorrect(validationResult);
         }
         return name;
     }
@@ -50,9 +60,9 @@ public class ConsoleReader {
         String numberOfParticipants = "";
         while (!validationResult.isValid()) {
             showMessage(ENTER_NUMBER_OF_PARTICIPANTS);
-            numberOfParticipants = consoleScanner.nextLine().trim();
+            numberOfParticipants = readRequest();
             validationResult = consoleValidator.isCorrectNumberOfParticipants(numberOfParticipants);
-            printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
+            printIfNotCorrect(validationResult);
         }
         return Integer.parseInt(numberOfParticipants);
     }
@@ -62,41 +72,60 @@ public class ConsoleReader {
         String musicGenre = "";
         while (!validationResult.isValid()) {
             showMessage(ENTER_THE_GENRE_OF_MUSIC);
-            musicGenre = consoleScanner.nextLine().toUpperCase().trim();
+            musicGenre = readRequest().toUpperCase();
             validationResult = consoleValidator.isCorrectGenre(musicGenre);
-            printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
+            printIfNotCorrect(validationResult);
         }
         return MusicGenre.valueOf(musicGenre.toUpperCase());
     }
 
     public BestAlbum readBestAlbum() {
+        return new BestAlbum(readNameBestAlbum(), readSales());
+    }
+
+    public String readNameBestAlbum() {
         ValidationResult validationResult = new ValidationResult("");
         String name = "";
-        String sales = "";
         while (!validationResult.isValid()) {
             showMessage(ENTER_NAME_OF_THE_BEST_ALBUM);
-            name = consoleScanner.nextLine().trim();
+            name = readRequest();
             validationResult = consoleValidator.isCorrectNameBestAlbum(name);
-            printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
+            printIfNotCorrect(validationResult);
         }
+        return name;
+    }
 
-        validationResult = new ValidationResult("");
+    public long readSales() {
+        ValidationResult validationResult = new ValidationResult("");
+        String sales = "";
         while (!validationResult.isValid()) {
             showMessage(ENTER_THE_SALES_OF_THE_BEST_ALBUM);
-            sales = consoleScanner.nextLine().trim();
+            sales = readRequest();
             validationResult = consoleValidator.isCorrectSalesBestAlbum(sales);
-            printIfNotCorrect(validationResult.isValid(), validationResult.getErrorMessage());
+            printIfNotCorrect(validationResult);
         }
-        return new BestAlbum(name, Long.parseLong(sales));
+        return Long.parseLong(sales);
+    }
+
+    public String readPath() {
+        ValidationResult validationResult = new ValidationResult("");
+        String path = "";
+        while (!validationResult.isValid()) {
+            showMessage(ENTER_PATH);
+            path = readRequest();
+            validationResult = consoleValidator.isCorrectPath(path);
+            printIfNotCorrect(validationResult);
+        }
+        return path;
     }
 
     private void showMessage(String message) {
         System.out.println(message);
     }
 
-    private void printIfNotCorrect(boolean isCorrect, String message) {
-        if (!isCorrect) {
-            System.out.println(message);
+    private void printIfNotCorrect(ValidationResult validationResult) {
+        if (!validationResult.isValid()) {
+            showMessage(validationResult.getErrorMessage());
         }
     }
 

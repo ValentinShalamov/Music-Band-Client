@@ -2,6 +2,7 @@ package music;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class MusicBand implements Comparable<MusicBand> {
     private Long id;
@@ -33,6 +34,10 @@ public class MusicBand implements Comparable<MusicBand> {
         return bestAlbum;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -53,6 +58,10 @@ public class MusicBand implements Comparable<MusicBand> {
         this.id = id;
     }
 
+    public static void setGlobId(long id) {
+        globId = id;
+    }
+
     public static void clearGlobId() {
         globId = 0;
     }
@@ -68,5 +77,18 @@ public class MusicBand implements Comparable<MusicBand> {
                 "genre is %s, the best album is %s, count sales of the best album = %d \n",
                 id, name, creationDate.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")), numberOfParticipants, establishmentDate, genre,
                 bestAlbum.getName(), bestAlbum.getSales());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MusicBand musicBand = (MusicBand) o;
+        return Objects.equals(name, musicBand.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 }

@@ -5,5 +5,5 @@ public enum MusicGenre {
     JAZZ,
     BLUES,
     MATH_ROCK,
-    BRIT_POP;
+    BRIT_POP
 }

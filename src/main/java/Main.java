@@ -1,4 +1,5 @@
 import client.ConsoleUI;
+import file.FileManager;
 import manager.CollectionManager;
 import manager.Manager;
 import music.MusicBand;
@@ -9,7 +10,8 @@ public class Main {
     public static void main(String[] args) {
         HashSet<MusicBand> musicBands = new HashSet<>();
         CollectionManager collectionManager = new CollectionManager(musicBands);
-        Manager manager = new Manager(collectionManager);
+        FileManager fileManager = new FileManager(collectionManager);
+        Manager manager = new Manager(collectionManager, fileManager);
         ConsoleUI consoleUI = new ConsoleUI(manager);
         consoleUI.start();
     }

@@ -1,0 +1,86 @@
+[
+  {
+    "id": 2,
+    "name": "222",
+    "creationDate": "2024-07-15T21:02:09.101259845",
+    "numberOfParticipants": 222,
+    "establishmentDate": "2024-07-15",
+    "genre": "JAZZ",
+    "bestAlbum": {
+      "name": "222",
+      "sales": 222
+    }
+  },
+  {
+    "id": 4,
+    "name": "442",
+    "creationDate": "2024-07-15T21:04:27.292394650",
+    "numberOfParticipants": 44,
+    "establishmentDate": "2024-07-15",
+    "genre": "JAZZ",
+    "bestAlbum": {
+      "name": "rewr",
+      "sales": 4335
+    }
+  },
+  {
+    "id": 1,
+    "name": "111",
+    "creationDate": "2024-07-15T21:02:01.323319230",
+    "numberOfParticipants": 111,
+    "establishmentDate": "2024-07-15",
+    "genre": "JAZZ",
+    "bestAlbum": {
+      "name": "111",
+      "sales": 111
+    }
+  },
+  {
+    "id": 3,
+    "name": "eee",
+    "creationDate": "2024-07-15T21:02:17.679210358",
+    "numberOfParticipants": 333,
+    "establishmentDate": "2024-07-15",
+    "genre": "JAZZ",
+    "bestAlbum": {
+      "name": "eet",
+      "sales": 333
+    }
+  },
+  {
+    "id": 5,
+    "name": "dsa",
+    "creationDate": "2024-07-22T18:11:39.892711996",
+    "numberOfParticipants": 324,
+    "establishmentDate": "2024-07-22",
+    "genre": "BLUES",
+    "bestAlbum": {
+      "name": "das",
+      "sales": 234
+    }
+  },
+  {
+    "id": 20,
+    "name": "442",
+    "creationDate": "2024-07-15T21:04:27.292394650",
+    "numberOfParticipants": 44,
+    "establishmentDate": "2024-07-15",
+    "genre": "JAZZ",
+    "bestAlbum": {
+      "name": "rewr",
+      "sales": 4335
+    }
+  },
+  {
+    "id": 21,
+    "name": "442",
+    "creationDate": "2024-07-15T21:04:27.292394650",
+    "numberOfParticipants": 44,
+    "establishmentDate": "2024-07-15",
+    "genre": "JAZZ",
+    "bestAlbum": {
+      "name": "rewr",
+      "sales": 4335
+    }
+  }
+]
