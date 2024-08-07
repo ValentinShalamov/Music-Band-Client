@@ -13,10 +13,7 @@ public class MusicBand implements Comparable<MusicBand> {
     private MusicGenre genre;
     private BestAlbum bestAlbum;
 
-    private static long globId;
-
     public MusicBand() {
-        this.id = ++globId;
         this.creationDate = LocalDateTime.now();
         this.establishmentDate = creationDate.toLocalDate();
     }
@@ -24,18 +21,6 @@ public class MusicBand implements Comparable<MusicBand> {
     @Override
     public int compareTo(MusicBand anotherBand) {
         return Long.compare(bestAlbum.getSales(), anotherBand.bestAlbum.getSales());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public BestAlbum getBestAlbum() {
-        return bestAlbum;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
@@ -52,22 +37,6 @@ public class MusicBand implements Comparable<MusicBand> {
 
     public void setBestAlbum(BestAlbum bestAlbum) {
         this.bestAlbum = bestAlbum;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public static void setGlobId(long id) {
-        globId = id;
-    }
-
-    public static void clearGlobId() {
-        globId = 0;
-    }
-
-    public static void decId() {
-        globId -= 1;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package file;
+package script;
 
 import builder.MusicBandBuilder;
 import exceptions.MusicBandParsingException;
@@ -55,34 +55,23 @@ public class MusicBandFieldsParser {
         ValidationResult validationResultSales = new ConsoleValidator().isCorrectSalesBestAlbum(sales);
         if (validationResultName.isValid() && validationResultSales.isValid()) {
             return new BestAlbum(name, Long.parseLong(sales));
+        } else if (!validationResultName.isValid()) {
+            throw new MusicBandParsingException(validationResultName.getErrorMessage());
         } else {
-            throw new MusicBandParsingException(validationResultName.getErrorMessage() + validationResultSales.getErrorMessage());
+            throw new MusicBandParsingException(validationResultSales.getErrorMessage());
         }
     }
 
-    public String parsePath(String path) throws RuntimeException {
-        ValidationResult validationResult = new ConsoleValidator().isCorrectPath(path);
-        if (validationResult.isValid()) {
-            return path;
-        } else {
-            throw new MusicBandParsingException(validationResult.getErrorMessage());
-        }
-    }
-
-    public long parseId(String id) throws RuntimeException {
+    public void parseId(String id) throws RuntimeException {
         ValidationResult validationResult = new ConsoleValidator().isCorrectArg(id);
-        if (validationResult.isValid()) {
-            return Long.parseLong(id);
-        } else {
+        if (!validationResult.isValid()) {
             throw new MusicBandParsingException(validationResult.getErrorMessage());
         }
     }
 
-    public long parseSales(String sales) throws RuntimeException {
+    public void parseSales(String sales) throws RuntimeException {
         ValidationResult validationResult = new ConsoleValidator().isCorrectSalesBestAlbum(sales);
-        if (validationResult.isValid()) {
-            return Long.parseLong(sales);
-        } else {
+        if (!validationResult.isValid()) {
             throw new MusicBandParsingException(validationResult.getErrorMessage());
         }
     }

@@ -1,18 +1,11 @@
 import client.ConsoleUI;
-import file.FileManager;
-import manager.CollectionManager;
-import manager.Manager;
-import music.MusicBand;
 
-import java.util.HashSet;
+import java.io.IOException;
+import java.net.InetAddress;
 
 public class Main {
-    public static void main(String[] args) {
-        HashSet<MusicBand> musicBands = new HashSet<>();
-        CollectionManager collectionManager = new CollectionManager(musicBands);
-        FileManager fileManager = new FileManager(collectionManager);
-        Manager manager = new Manager(collectionManager, fileManager);
-        ConsoleUI consoleUI = new ConsoleUI(manager);
+    public static void main(String[] args) throws IOException {
+        ConsoleUI consoleUI = new ConsoleUI(InetAddress.getByName("localhost"), 8888);
         consoleUI.start();
     }
 }
