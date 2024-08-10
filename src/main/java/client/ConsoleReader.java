@@ -125,7 +125,7 @@ public class ConsoleReader {
 
     private void printIfNotCorrect(ValidationResult validationResult) {
         if (!validationResult.isValid()) {
-            showMessage(validationResult.getErrorMessage());
+            showMessage(validationResult.errorMessage());
         }
     }
 

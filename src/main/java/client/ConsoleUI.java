@@ -116,7 +116,7 @@ public class ConsoleUI {
                             showMessage(sendRequest(serializer.parseString(command)));
                         }
                     } else {
-                        showMessage(validationResult.getErrorMessage());
+                        showMessage(validationResult.errorMessage());
                     }
                 }
 

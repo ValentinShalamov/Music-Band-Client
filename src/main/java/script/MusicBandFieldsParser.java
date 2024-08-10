@@ -26,7 +26,7 @@ public class MusicBandFieldsParser {
         if (validationResult.isValid()) {
             return name;
         } else {
-            throw new MusicBandParsingException(validationResult.getErrorMessage());
+            throw new MusicBandParsingException(validationResult.errorMessage());
         }
     }
 
@@ -35,7 +35,7 @@ public class MusicBandFieldsParser {
         if (validationResult.isValid()) {
             return Integer.parseInt(numberOfParticipants);
         } else {
-            throw new MusicBandParsingException(validationResult.getErrorMessage());
+            throw new MusicBandParsingException(validationResult.errorMessage());
         }
     }
 
@@ -44,7 +44,7 @@ public class MusicBandFieldsParser {
         if (validationResult.isValid()) {
             return MusicGenre.valueOf(genre.toUpperCase());
         } else {
-            throw new MusicBandParsingException(validationResult.getErrorMessage());
+            throw new MusicBandParsingException(validationResult.errorMessage());
         }
     }
 
@@ -56,23 +56,23 @@ public class MusicBandFieldsParser {
         if (validationResultName.isValid() && validationResultSales.isValid()) {
             return new BestAlbum(name, Long.parseLong(sales));
         } else if (!validationResultName.isValid()) {
-            throw new MusicBandParsingException(validationResultName.getErrorMessage());
+            throw new MusicBandParsingException(validationResultName.errorMessage());
         } else {
-            throw new MusicBandParsingException(validationResultSales.getErrorMessage());
+            throw new MusicBandParsingException(validationResultSales.errorMessage());
         }
     }
 
     public void parseId(String id) throws RuntimeException {
         ValidationResult validationResult = new ConsoleValidator().isCorrectArg(id);
         if (!validationResult.isValid()) {
-            throw new MusicBandParsingException(validationResult.getErrorMessage());
+            throw new MusicBandParsingException(validationResult.errorMessage());
         }
     }
 
     public void parseSales(String sales) throws RuntimeException {
         ValidationResult validationResult = new ConsoleValidator().isCorrectSalesBestAlbum(sales);
         if (!validationResult.isValid()) {
-            throw new MusicBandParsingException(validationResult.getErrorMessage());
+            throw new MusicBandParsingException(validationResult.errorMessage());
         }
     }
 }
