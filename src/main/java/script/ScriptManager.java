@@ -4,7 +4,6 @@ import command.Command;
 import command.CommandSerializer;
 import exceptions.EmptyFileException;
 import exceptions.MusicBandParsingException;
-import music.BestAlbum;
 import music.MusicBand;
 
 import java.io.File;
@@ -56,21 +55,22 @@ public class ScriptManager {
                     String id;
                     String command = fileScanner.nextLine().toLowerCase().trim();
                     if (command.startsWith("update")) {
-                        commandName = "update";
                         musicBand = parser.createBand(fileScanner);
                         id = command.split(" ", 2)[1];
                         parser.parseId(id);
-                        scriptResult.addCommand(new Command(commandName, serializer.serializeMusicBand(musicBand), id));
+                        scriptResult.addCommand(new Command("update", serializer.serializeMusicBand(musicBand), id));
                     } else if (command.startsWith("remove")) {
-                        commandName = "remove";
                         id = command.split(" ", 2)[1];
                         parser.parseId(id);
-                        scriptResult.addCommand(new Command(commandName, id));
+                        scriptResult.addCommand(new Command("remove", id));
                     } else if (command.startsWith("remove_lower")) {
-                        commandName = "remove_lower";
                         String sales = command.split(" ", 2)[1];
                         parser.parseSales(sales);
-                        scriptResult.addCommand(new Command(commandName, sales));
+                        scriptResult.addCommand(new Command("remove_lower", sales));
+                    } else if (command.startsWith("filter_by_best_album")) {
+                        String sales = command.split(" ",2)[1];
+                        parser.parseSales(sales);
+                        scriptResult.addCommand(new Command("filter_by_best_album", sales));
                     } else {
                         switch (command) {
                             case "help", "info", "show", "clear", "history", "min_by_best_album",
@@ -83,11 +83,6 @@ public class ScriptManager {
                                 musicBand = parser.createBand(fileScanner);
                                 scriptResult.addCommand(new Command(commandName, serializer.serializeMusicBand(musicBand)));
                             }
-                            case "filter_by_best_album" -> {
-                                commandName = command;
-                                BestAlbum bestAlbum = parser.parseBestAlbum(fileScanner);
-                                scriptResult.addCommand(new Command(commandName, serializer.serializeBestAlbum(bestAlbum)));
-                            }
                         }
                     }
                 } catch (MusicBandParsingException e) {
@@ -95,7 +90,7 @@ public class ScriptManager {
                 }
             }
         } else {
-            throw new SecurityException(NOT_RIGHT_ACCESS_ON_READ);
+            throw new SecurityException(NO_READ_PERMISSION);
         }
         return scriptResult;
     }
