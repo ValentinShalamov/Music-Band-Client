@@ -47,13 +47,13 @@ public class ScriptManager {
             throw new FileNotFoundException(NO_SUCH_FILE);
         }
         if (file.canRead()) {
-            String commandName = null;
+            String command = null;
             Scanner fileScanner = new Scanner(file);
             while (fileScanner.hasNext()) {
                 try {
                     MusicBand musicBand;
                     String id;
-                    String command = fileScanner.nextLine().toLowerCase().trim();
+                    command = fileScanner.nextLine().toLowerCase().trim();
                     if (command.startsWith("update")) {
                         musicBand = parser.createBand(fileScanner);
                         id = command.split(" ", 2)[1];
@@ -74,19 +74,21 @@ public class ScriptManager {
                     } else {
                         switch (command) {
                             case "help", "info", "show", "clear", "history", "min_by_best_album",
-                                 "print_field_asc_best_album" -> {
-                                commandName = command;
-                                scriptResult.addCommand(new Command(commandName));
-                            }
+                                 "print_field_asc_best_album" -> scriptResult.addCommand(new Command(command));
+
                             case "add", "add_if_min" -> {
-                                commandName = command;
                                 musicBand = parser.createBand(fileScanner);
-                                scriptResult.addCommand(new Command(commandName, serializer.serializeMusicBand(musicBand)));
+                                scriptResult.addCommand(new Command(command, serializer.serializeMusicBand(musicBand)));
+                            }
+                            default -> {
+                                if (!command.isEmpty()) {
+                                    scriptResult.addErrorMessages("Command: " + command + " " + "is incorrect command");
+                                }
                             }
                         }
                     }
                 } catch (MusicBandParsingException e) {
-                    scriptResult.addErrorMessages("Command: " + commandName + " " + "Error message: " + e.getMessage());
+                    scriptResult.addErrorMessages("Command: " + command + " " + "Error message: " + e.getMessage());
                 }
             }
         } else {
