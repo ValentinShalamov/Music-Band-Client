@@ -50,8 +50,8 @@ public class ServerConnector implements AutoCloseable {
     }
 
     private byte[] getMessageForSend(String request) {
-        byte[] intValueBox = ByteBuffer.allocate(4).putInt(request.length()).array();
         byte[] requestBytes = request.getBytes(StandardCharsets.UTF_8);
+        byte[] intValueBox = ByteBuffer.allocate(4).putInt(requestBytes.length).array();
         byte[] message = Arrays.copyOf(intValueBox, intValueBox.length + requestBytes.length);
         System.arraycopy(requestBytes, 0, message, 4, requestBytes.length);
         return message;
