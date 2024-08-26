@@ -5,5 +5,6 @@ public class ConnectionMessages {
     public static final String SUCCESSFUL_CONNECT = "You have connected to server ";
     public static final String CONNECTION_TIMEOUT = "Time of waiting connection is out \n";
     public static final String WAITING_CONNECTION = "Waiting connection...";
+    public static final String CHANNEL_CLOSED = "The server has closed connection \n";
 
 }

@@ -1,5 +1,6 @@
 package server;
 
+import exceptions.ChannelClosedException;
 import exceptions.SocketCloseException;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.OutputStream;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static messages.ConnectionMessages.*;
 
@@ -50,32 +52,19 @@ public class ServerConnector implements AutoCloseable {
     private byte[] getMessageForSend(String request) {
         byte[] intValueBox = ByteBuffer.allocate(4).putInt(request.length()).array();
         byte[] requestBytes = request.getBytes(StandardCharsets.UTF_8);
-
-        byte[] message = new byte[intValueBox.length + requestBytes.length];
-        for (int i = 0; i < message.length; i++) {
-            if (i < 4) {
-                message[i] = intValueBox[i];
-            } else {
-                message[i] = requestBytes[i - 4];
-            }
-        }
+        byte[] message = Arrays.copyOf(intValueBox, intValueBox.length + requestBytes.length);
+        System.arraycopy(requestBytes, 0, message, 4, requestBytes.length);
         return message;
     }
 
     public String sendRequest(String request) throws IOException {
-        byte[] message = getMessageForSend(request);
-
-        for (byte b : message) {
-            outStream.write(b);
-            // This code uses for a test
-//            try {
-//                Thread.sleep(100);
-//            } catch (InterruptedException e) {
-//
-//            }
+        try {
+            outStream.write(getMessageForSend(request));
+            outStream.flush();
+            return readMessage();
+        } catch (IOException e) {
+            throw new ChannelClosedException(CHANNEL_CLOSED);
         }
-        outStream.flush();
-        return readMessage();
     }
 
     public String getGreetMessage() throws IOException {
@@ -86,12 +75,8 @@ public class ServerConnector implements AutoCloseable {
     public void close() throws Exception {
         try {
             socket.close();
-        } finally {
-            try {
-                if (!socket.isClosed()) {
-                    socket.close();
-                }
-            } catch (IOException e) {
+        } catch (IOException e) {
+            if (!socket.isClosed()) {
                 throw new SocketCloseException(e.getMessage());
             }
         }
