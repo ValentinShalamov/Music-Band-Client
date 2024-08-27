@@ -70,8 +70,8 @@ public class ConsoleReader {
     private MusicGenre readMusicGenre() {
         ValidationResult validationResult = new ValidationResult("");
         String musicGenre = "";
+        showMessage(ENTER_THE_GENRE_OF_MUSIC);
         while (!validationResult.isValid()) {
-            showMessage(ENTER_THE_GENRE_OF_MUSIC);
             musicGenre = readRequest().toUpperCase();
             validationResult = consoleValidator.isCorrectGenre(musicGenre);
             printIfNotCorrect(validationResult);
@@ -125,7 +125,7 @@ public class ConsoleReader {
 
     private void printIfNotCorrect(ValidationResult validationResult) {
         if (!validationResult.isValid()) {
-            showMessage(validationResult.getErrorMessage());
+            showMessage(validationResult.errorMessage());
         }
     }
 

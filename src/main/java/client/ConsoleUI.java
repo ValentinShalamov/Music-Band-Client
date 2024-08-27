@@ -1,100 +1,124 @@
 package client;
 
+import command.Command;
+import command.CommandSerializer;
 import exceptions.UserCancelledOperationException;
-import manager.Manager;
+import script.ScriptManager;
+import script.ScriptResult;
+import server.ServerConnector;
 import validator.ConsoleValidator;
 import validator.ValidationResult;
 
-import static messages.ResultMessages.PROGRAM_HAS_BEEN_COMPLETED;
-import static messages.UserMessages.*;
+import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+
+import static messages.ConnectionMessages.SUCCESSFUL_CONNECT;
+import static messages.ConnectionMessages.WAITING_CONNECTION;
+import static messages.UserMessages.ENTER_COMMAND;
 
 public class ConsoleUI {
-    private final Manager manager;
     private final ConsoleReader consoleReader;
-    private String command;
+    private String commandName;
     private String arg;
-    private final String AUTOSAVE_PATH = "AUTOSAVE.json";
+    private final CommandSerializer serializer;
+    private final ScriptManager scriptManager;
+    private final ServerConnector connector;
 
-    public ConsoleUI(Manager manager) {
-        this.manager = manager;
+    public ConsoleUI(ServerConnector connector) {
         this.consoleReader = new ConsoleReader();
-        this.command = "";
+        this.commandName = "";
         this.arg = "";
+        this.serializer = new CommandSerializer();
+        this.scriptManager = new ScriptManager();
+        this.connector = connector;
     }
 
-    public void start() {
-        initMusicBands();
+
+    public boolean hasConnect() throws IOException {
+        showMessage(WAITING_CONNECTION);
+        String response = connector.connect();
+        showMessage(response);
+        if (response.startsWith(SUCCESSFUL_CONNECT)) {
+            showMessage(connector.getGreetMessage());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void scanRequests() throws IOException {
+        if (!hasConnect()) {
+            return;
+        }
         String request;
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            showMessage(PROGRAM_HAS_BEEN_COMPLETED);
-            showMessage(manager.save(AUTOSAVE_PATH));
-        }));
+        Command command;
         while (true) {
             try {
                 showMessage(ENTER_COMMAND);
                 request = consoleReader.readRequest();
                 fillCommand(request.toLowerCase());
                 if (arg == null) {
-                    switch (command) {
-                        case "help" -> showMessage(manager.help());
-                        case "info" -> showMessage(manager.info());
-                        case "show" -> showMessage(manager.show());
+                    switch (commandName) {
+                        case "add", "add_if_min" -> {
+                            command = new Command(commandName, serializer.serializeMusicBand(consoleReader.createBand()));
+                            showMessage(connector.sendRequest(serializer.serializeCommand(command)));
+                        }
+                        case "execute_script" -> {
+                            ScriptResult scriptResult = scriptManager.getScriptResult(consoleReader.readPath());
+                            ArrayDeque<Command> commands = scriptResult.getCommands();
+                            ArrayList<String> errorMessages = scriptResult.getErrorMessages();
+                            for (String message : errorMessages) {
+                                showMessage(message);
+                            }
+                            if (errorMessages.isEmpty()) {
+                                while (!commands.isEmpty()) {
+                                    command = commands.poll();
+                                    showMessage(connector.sendRequest(serializer.serializeCommand(command)));
+                                }
+                            }
+                        }
                         case "exit" -> {
                             return;
                         }
-                        case "add" -> showMessage(manager.add(consoleReader.createBand()));
-                        case "clear" -> showMessage(manager.clear());
-                        case "history" -> showMessage(manager.history());
-                        case "add_if_min" -> showMessage(manager.addIfMin(consoleReader.createBand()));
-                        case "min_by_best_album" -> showMessage(manager.minByBestAlbum());
-                        case "filter_by_best_album" -> showMessage(manager.filterByBestAlbum(consoleReader.readBestAlbum()));
-                        case "print_field_asc_best_album" -> showMessage(manager.printFieldAscBestAlbum());
-                        case "save" -> showMessage(manager.save(consoleReader.readPath()));
-                        case "execute_script" -> showMessage(manager.executeScript(consoleReader.readPath()));
-                        default -> showMessage(NO_SUCH_COMMAND);
+                        default -> {
+                            command = new Command(commandName);
+                            showMessage(connector.sendRequest(serializer.serializeCommand(command)));
+                        }
                     }
                 } else {
                     ValidationResult validationResult = new ConsoleValidator().isCorrectArg(arg);
                     if (validationResult.isValid()) {
-                        switch (command) {
-                            case "update" -> showMessage(manager.updateById(consoleReader.createBand(), Integer.parseInt(arg)));
-                            case "remove" -> showMessage(manager.removeById(Integer.parseInt(arg)));
-                            case "remove_lower" -> showMessage(manager.removeLower(Long.parseLong(arg)));
-                            default -> showMessage(NO_SUCH_COMMAND);
+                        if (commandName.equals("update")) {
+                            command = new Command(commandName, serializer.serializeMusicBand(consoleReader.createBand()), arg);
+                            showMessage(connector.sendRequest(serializer.serializeCommand(command)));
+                        } else {
+                            command = new Command(commandName, arg);
+                            showMessage(connector.sendRequest(serializer.serializeCommand(command)));
                         }
                     } else {
-                        showMessage(validationResult.getErrorMessage());
+                        showMessage(validationResult.errorMessage());
                     }
                 }
+
             } catch (UserCancelledOperationException e) {
                 showMessage(e.getMessage());
             }
         }
     }
 
-    private void initMusicBands() {
-        System.out.println(GREET_MESSAGE);
-        String env = System.getenv("PATH_TO_FILE_COLLECTION");
-        if (env != null) {
-            showMessage(manager.read(env));
-        } else {
-            showMessage(WORK_WITH_EMPTY_COLLECTION);
-        }
-    }
-
     private void fillCommand(String request) {
         String[] commandWithArg = request.split(" ", 2);
         if (commandWithArg.length == 1) {
-            command = commandWithArg[0];
+            commandName = commandWithArg[0];
             arg = null;
         } else {
-            command = commandWithArg[0];
+            commandName = commandWithArg[0];
             arg = commandWithArg[1];
         }
     }
 
-    private void showMessage(String message) {
+    public void showMessage(String message) {
         System.out.println(message);
     }
-
 }

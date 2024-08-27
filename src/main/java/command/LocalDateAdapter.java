@@ -1,4 +1,4 @@
-package file;
+package command;
 
 import com.google.gson.*;
 

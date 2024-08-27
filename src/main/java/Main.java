@@ -1,18 +1,15 @@
 import client.ConsoleUI;
-import file.FileManager;
-import manager.CollectionManager;
-import manager.Manager;
-import music.MusicBand;
+import server.ServerConnector;
 
-import java.util.HashSet;
+import java.net.InetAddress;
 
 public class Main {
     public static void main(String[] args) {
-        HashSet<MusicBand> musicBands = new HashSet<>();
-        CollectionManager collectionManager = new CollectionManager(musicBands);
-        FileManager fileManager = new FileManager(collectionManager);
-        Manager manager = new Manager(collectionManager, fileManager);
-        ConsoleUI consoleUI = new ConsoleUI(manager);
-        consoleUI.start();
+        try(ServerConnector connector = new ServerConnector(InetAddress.getByName("localhost"), 8888)) {
+            ConsoleUI consoleUI = new ConsoleUI(connector);
+            consoleUI.scanRequests();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
