@@ -6,6 +6,72 @@ import static messages.ValidationMessages.*;
 
 public class ConsoleValidator {
 
+    public ValidationResult isCorrectLogin(String login) {
+        if (isEmpty(login)) {
+            return new ValidationResult(LOGIN_IS_EMPTY);
+        }
+        if (login.length() > 30) {
+            return new ValidationResult(LOGIN_IS_MORE_THAN_MAX);
+        }
+        if (hasOneSymbol(login)) {
+            return new ValidationResult(LOGIN_CONTAINS_SYMBOL);
+        }
+        return ValidationResult.OK;
+    }
+
+    public ValidationResult isCorrectPass(String pass) {
+        if (isEmpty(pass)) {
+            return new ValidationResult(PASS_IS_EMPTY);
+        }
+        if (hasOneSymbol(pass) && hasOneInteger(pass) && hasOneLetterLowerCase(pass) && hasOneLetterUpperCase(pass)) {
+            return ValidationResult.OK;
+        }
+        return new ValidationResult(PASS_MESSAGE);
+    }
+
+    private boolean hasOneSymbol(String string) {
+        char[] chars = string.toCharArray();
+        for (char aChar : chars) {
+            if (aChar >= '!' && aChar <= '/'
+                    || aChar >= ':' && aChar <= '@'
+                    || aChar >= '[' && aChar <= '`'
+                    || aChar >= '{' && aChar <= '~') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasOneInteger(String string) {
+        char[] chars = string.toCharArray();
+        for (char aChar : chars) {
+            if (aChar >= '0' && aChar <= '9') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasOneLetterLowerCase(String string) {
+        char[] chars = string.toCharArray();
+        for (char aChar : chars) {
+            if (aChar >= 'a' && aChar <= 'z') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasOneLetterUpperCase(String string) {
+        char[] chars = string.toCharArray();
+        for (char aChar : chars) {
+            if (aChar >= 'A' && aChar <= 'Z') {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ValidationResult isCorrectName(String name) {
         if (isEmpty(name)) {
             return new ValidationResult(NAME_IS_EMPTY);
