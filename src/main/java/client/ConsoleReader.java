@@ -24,11 +24,14 @@ public class ConsoleReader {
     }
 
     public Command readAuthenticationCommand() {
+        showMessage(INTERRUPT);
         while (true) {
-            showMessage(AUTHENTICATION_MESSAGE);
+            showMessage(STARTUP_MESSAGE);
             String request = readRequest();
-            if (request.equalsIgnoreCase("log") || request.equalsIgnoreCase("reg")) {
-                return new Command(request, readLogin(), readPass());
+            if (request.equalsIgnoreCase("login") || request.equalsIgnoreCase("register")) {
+                String login = readLogin();
+                String pass = readPass();
+                return new Command(request, login, pass);
             }
         }
     }

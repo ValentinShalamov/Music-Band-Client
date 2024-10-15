@@ -27,6 +27,6 @@ public class ValidationMessages {
     public static final String LOGIN_IS_MORE_THAN_MAX = "The login must be less than 30 symbols";
     public static final String LOGIN_CONTAINS_SYMBOL = "The login must not have any symbols \n";
     public static final String PASS_IS_EMPTY = "The pass can not be empty \n";
-    public static final String PASS_MESSAGE = "The pass must have the least one symbol, one lower case letter, one upper case letter and one digit \n";
+    public static final String PASS_MESSAGE = "The pass must have at least one special character, one lower case letter, one upper case letter and one digit \n";
 
 }

@@ -7,9 +7,10 @@ public class UserMessages {
     public static final String ENTER_THE_SALES_OF_THE_BEST_ALBUM = "Enter the sales of the best album: \n";
     public static final String ENTER_COMMAND = "Enter a command: ";
     public static final String ENTER_PATH = "Enter the path to file: ";
-    public static final String AUTHENTICATION_MESSAGE = "You need to log in the program. Enter 'log' or 'reg' ";
+    public static final String STARTUP_MESSAGE = "You need to log in the program. Enter 'login' or 'register' ";
     public static final String ENTER_LOGIN = "Enter a login: ";
     public static final String ENTER_PASS = "Enter a password: ";
+    public static final String INTERRUPT = "To interrupt any input data, use 'q'";
 
     public static final String ENTER_THE_GENRE_OF_MUSIC =
             "Enter a music genre, the music genre should be one of the following : \n" +

@@ -5,6 +5,14 @@ import music.MusicGenre;
 import static messages.ValidationMessages.*;
 
 public class ConsoleValidator {
+    private final char CHAR_DEC_33 = '!'; // DEC = 33 in the ASCII
+    private final char CHAR_DEC_47 = '/'; // DEC = 47 in the ASCII
+    private final char CHAR_DEC_58 = ':'; // DEC = 58 in the ASCII
+    private final char CHAR_DEC_64 = '@'; // DEC = 64 in the ASCII
+    private final char CHAR_DEC_91 = '['; // DEC = 91 in the ASCII
+    private final char CHAR_DEC_96 = '`'; // DEC = 96 in the ASCII
+    private final char CHAR_DEC_123 = '{'; // DEC = 123 in the ASCII
+    private final char CHAR_DEC_126 = '~'; // DEC = 126 in the ASCII
 
     public ValidationResult isCorrectLogin(String login) {
         if (isEmpty(login)) {
@@ -13,7 +21,7 @@ public class ConsoleValidator {
         if (login.length() > 30) {
             return new ValidationResult(LOGIN_IS_MORE_THAN_MAX);
         }
-        if (hasOneSymbol(login)) {
+        if (hasSpecialCharacter(login)) {
             return new ValidationResult(LOGIN_CONTAINS_SYMBOL);
         }
         return ValidationResult.OK;
@@ -23,26 +31,26 @@ public class ConsoleValidator {
         if (isEmpty(pass)) {
             return new ValidationResult(PASS_IS_EMPTY);
         }
-        if (hasOneSymbol(pass) && hasOneInteger(pass) && hasOneLetterLowerCase(pass) && hasOneLetterUpperCase(pass)) {
+        if (hasSpecialCharacter(pass) && hasDigit(pass) && hasLowerCaseLetter(pass) && hasUpperCaseLetter(pass)) {
             return ValidationResult.OK;
         }
         return new ValidationResult(PASS_MESSAGE);
     }
 
-    private boolean hasOneSymbol(String string) {
+    private boolean hasSpecialCharacter(String string) {
         char[] chars = string.toCharArray();
         for (char aChar : chars) {
-            if (aChar >= '!' && aChar <= '/'
-                    || aChar >= ':' && aChar <= '@'
-                    || aChar >= '[' && aChar <= '`'
-                    || aChar >= '{' && aChar <= '~') {
+            if (aChar >= CHAR_DEC_33 && aChar <= CHAR_DEC_47
+                    || aChar >= CHAR_DEC_58 && aChar <= CHAR_DEC_64
+                    || aChar >= CHAR_DEC_91 && aChar <= CHAR_DEC_96
+                    || aChar >= CHAR_DEC_123 && aChar <= CHAR_DEC_126) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean hasOneInteger(String string) {
+    private boolean hasDigit(String string) {
         char[] chars = string.toCharArray();
         for (char aChar : chars) {
             if (aChar >= '0' && aChar <= '9') {
@@ -52,7 +60,7 @@ public class ConsoleValidator {
         return false;
     }
 
-    private boolean hasOneLetterLowerCase(String string) {
+    private boolean hasLowerCaseLetter(String string) {
         char[] chars = string.toCharArray();
         for (char aChar : chars) {
             if (aChar >= 'a' && aChar <= 'z') {
@@ -62,7 +70,7 @@ public class ConsoleValidator {
         return false;
     }
 
-    private boolean hasOneLetterUpperCase(String string) {
+    private boolean hasUpperCaseLetter(String string) {
         char[] chars = string.toCharArray();
         for (char aChar : chars) {
             if (aChar >= 'A' && aChar <= 'Z') {
@@ -177,5 +185,4 @@ public class ConsoleValidator {
             return false;
         }
     }
-
 }
