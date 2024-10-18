@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import static messages.ConnectionMessages.SUCCESSFUL_CONNECT;
 import static messages.ConnectionMessages.WAITING_CONNECTION;
+import static messages.ResultMessages.AUTHORIZATION_SUCCESSFUL;
 import static messages.UserMessages.ENTER_COMMAND;
 
 public class ConsoleUI {
@@ -24,6 +25,7 @@ public class ConsoleUI {
     private final CommandSerializer serializer;
     private final ScriptManager scriptManager;
     private final ServerConnector connector;
+    private boolean isAuthenticated = false;
 
     public ConsoleUI(ServerConnector connector) {
         this.consoleReader = new ConsoleReader();
@@ -55,6 +57,14 @@ public class ConsoleUI {
         Command command;
         while (true) {
             try {
+                while (!isAuthenticated) {
+                    command = consoleReader.readAuthenticationCommand();
+                    String res = connector.sendRequest(serializer.serializeCommand(command));
+                    if (res.equals(AUTHORIZATION_SUCCESSFUL)) {
+                        isAuthenticated = true;
+                    }
+                    showMessage(res);
+                }
                 showMessage(ENTER_COMMAND);
                 request = consoleReader.readRequest();
                 fillCommand(request.toLowerCase());

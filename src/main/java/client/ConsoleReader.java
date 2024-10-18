@@ -1,6 +1,7 @@
 package client;
 
 import builder.MusicBandBuilder;
+import command.Command;
 import exceptions.UserCancelledOperationException;
 import music.BestAlbum;
 import music.MusicBand;
@@ -20,6 +21,43 @@ public class ConsoleReader {
     public ConsoleReader() {
         this.consoleScanner = new Scanner(System.in);
         this.consoleValidator = new ConsoleValidator();
+    }
+
+    public Command readAuthenticationCommand() {
+        showMessage(INTERRUPT);
+        while (true) {
+            showMessage(STARTUP_MESSAGE);
+            String request = readRequest();
+            if (request.equalsIgnoreCase("login") || request.equalsIgnoreCase("register")) {
+                String login = readLogin();
+                String pass = readPass();
+                return new Command(request, login, pass);
+            }
+        }
+    }
+
+    private String readLogin() {
+        ValidationResult validationResult = new ValidationResult("");
+        String login = "";
+        while (!validationResult.isValid()) {
+            showMessage(ENTER_LOGIN);
+            login = readRequest();
+            validationResult = consoleValidator.isCorrectLogin(login);
+            printIfNotCorrect(validationResult);
+        }
+        return login;
+    }
+
+    private String readPass() {
+        ValidationResult validationResult = new ValidationResult("");
+        String pass = "";
+        while (!validationResult.isValid()) {
+            showMessage(ENTER_PASS);
+            pass = readRequest();
+            validationResult = consoleValidator.isCorrectPass(pass);
+            printIfNotCorrect(validationResult);
+        }
+        return pass;
     }
 
     public String readRequest() {
