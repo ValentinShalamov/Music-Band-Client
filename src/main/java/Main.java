@@ -6,7 +6,7 @@ import java.net.InetAddress;
 public class Main {
     public static void main(String[] args) {
 
-        try(ServerConnector connector = new ServerConnector(InetAddress.getByName("localhost"), 8888)) {
+        try(ServerConnector connector = new ServerConnector(InetAddress.getByName("193.124.115.131"), 8888)) {
             ConsoleUI consoleUI = new ConsoleUI(connector);
             consoleUI.scanRequests();
         } catch (Exception e) {
