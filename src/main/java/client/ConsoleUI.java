@@ -60,7 +60,7 @@ public class ConsoleUI {
                 while (!isAuthenticated) {
                     command = consoleReader.readAuthenticationCommand();
                     String res = connector.sendRequest(serializer.serializeCommand(command));
-                    if (res.equals(AUTHORIZATION_SUCCESSFUL)) {
+                    if (res.contains(AUTHORIZATION_SUCCESSFUL)) {
                         isAuthenticated = true;
                     }
                     showMessage(res);
