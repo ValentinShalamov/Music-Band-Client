@@ -31,7 +31,7 @@ public class ConsoleReader {
             if (request.equalsIgnoreCase("login") || request.equalsIgnoreCase("register")) {
                 String login = readLogin();
                 String pass = readPass();
-                return new Command(request, login, pass);
+                return new Command(request.toLowerCase(), login, pass);
             }
         }
     }
