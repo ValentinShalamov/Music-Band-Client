@@ -11,8 +11,14 @@ import validator.ValidationResult;
 
 import java.util.Scanner;
 
+import static messages.ConnectionMessages.YOU_HAVE_SELECTED_HOST;
+import static messages.ConnectionMessages.YOU_HAVE_SELECTED_PORT;
 import static messages.ResultMessages.INTERRUPT_MESSAGE;
 import static messages.UserMessages.*;
+import static messages.ValidationMessages.LOGIN_MUST_CONTAIN;
+import static messages.ValidationMessages.PASS_MUST_CONTAIN;
+import static util.DefaultValues.DEFAULT_HOST;
+import static util.DefaultValues.DEFAULT_PORT;
 
 public class ConsoleReader {
     private final ConsoleValidator consoleValidator;
@@ -28,33 +34,70 @@ public class ConsoleReader {
         while (true) {
             showMessage(STARTUP_MESSAGE);
             String request = readRequest();
-            if (request.equalsIgnoreCase("login") || request.equalsIgnoreCase("register")) {
-                String login = readLogin();
-                String pass = readPass();
+            if (request.equalsIgnoreCase("register")) {
+                String login = readLogin(true);
+                String pass = readPass(true);
+                return new Command(request.toLowerCase(), login, pass);
+            }
+            if (request.equalsIgnoreCase("login")) {
+                String login = readLogin(false);
+                String pass = readPass(false);
                 return new Command(request.toLowerCase(), login, pass);
             }
         }
     }
 
-    private String readLogin() {
+    public String readHost() {
+        showMessage(ENTER_HOST_ADDRESS);
+        String host = readRequest();
+        if (host.trim().isEmpty()) {
+            showMessage(YOU_HAVE_SELECTED_HOST + DEFAULT_HOST + "\n");
+            return DEFAULT_HOST;
+        }
+        showMessage(String.format(YOU_HAVE_SELECTED_HOST + "%s \n", host.trim()));
+        return host;
+    }
+
+    public int readPort() {
+        ValidationResult validationResult = new ValidationResult("");
+        String port = "";
+
+        while (!validationResult.isValid()) {
+            showMessage(ENTER_PORT_NUMBER);
+            port = readRequest();
+            if (port.trim().isEmpty()) {
+                showMessage(YOU_HAVE_SELECTED_PORT + DEFAULT_PORT + "\n");
+                return DEFAULT_PORT;
+            } else {
+                validationResult = consoleValidator.isCorrectPort(port);
+                printIfNotCorrect(validationResult);
+            }
+        }
+        showMessage(String.format(YOU_HAVE_SELECTED_PORT + "%s \n", port.trim()));
+        return Integer.parseInt(port);
+    }
+
+    private String readLogin(boolean isRegistration) {
         ValidationResult validationResult = new ValidationResult("");
         String login = "";
+        if (isRegistration) showMessage(LOGIN_MUST_CONTAIN);
         while (!validationResult.isValid()) {
             showMessage(ENTER_LOGIN);
             login = readRequest();
-            validationResult = consoleValidator.isCorrectLogin(login);
+            validationResult = consoleValidator.isCorrectLogin(isRegistration, login);
             printIfNotCorrect(validationResult);
         }
         return login;
     }
 
-    private String readPass() {
+    private String readPass(boolean isRegistration) {
         ValidationResult validationResult = new ValidationResult("");
         String pass = "";
+        if (isRegistration) showMessage(PASS_MUST_CONTAIN);
         while (!validationResult.isValid()) {
             showMessage(ENTER_PASS);
             pass = readRequest();
-            validationResult = consoleValidator.isCorrectPass(pass);
+            validationResult = consoleValidator.isCorrectPass(isRegistration, pass);
             printIfNotCorrect(validationResult);
         }
         return pass;
@@ -106,15 +149,27 @@ public class ConsoleReader {
     }
 
     private MusicGenre readMusicGenre() {
-        ValidationResult validationResult = new ValidationResult("");
-        String musicGenre = "";
         showMessage(ENTER_THE_GENRE_OF_MUSIC);
-        while (!validationResult.isValid()) {
-            musicGenre = readRequest().toUpperCase();
-            validationResult = consoleValidator.isCorrectGenre(musicGenre);
-            printIfNotCorrect(validationResult);
+        while (true) {
+            switch (readRequest().trim()) {
+                case "1" -> {
+                    return MusicGenre.PSYCHEDELIC_CLOUD_RAP;
+                }
+                case "2" -> {
+                    return MusicGenre.JAZZ;
+                }
+                case "3" -> {
+                    return MusicGenre.BLUES;
+                }
+                case "4" -> {
+                    return MusicGenre.MATH_ROCK;
+                }
+                case "5" -> {
+                    return MusicGenre.BRIT_POP;
+                }
+                default -> showMessage(DEFAULT_MUSIC_GENRE_MESSAGE);
+            }
         }
-        return MusicGenre.valueOf(musicGenre.toUpperCase());
     }
 
     public BestAlbum readBestAlbum() {
@@ -166,5 +221,4 @@ public class ConsoleReader {
             showMessage(validationResult.errorMessage());
         }
     }
-
 }

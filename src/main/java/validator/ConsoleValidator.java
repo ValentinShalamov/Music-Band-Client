@@ -6,43 +6,81 @@ import static messages.ValidationMessages.*;
 
 public class ConsoleValidator {
     private final char CHAR_DEC_33 = '!'; // DEC = 33 in the ASCII
+    private final char CHAR_DEC_45 = '-';
     private final char CHAR_DEC_47 = '/'; // DEC = 47 in the ASCII
     private final char CHAR_DEC_58 = ':'; // DEC = 58 in the ASCII
     private final char CHAR_DEC_64 = '@'; // DEC = 64 in the ASCII
     private final char CHAR_DEC_91 = '['; // DEC = 91 in the ASCII
+    private final char CHAR_DEC_95 = '_';
     private final char CHAR_DEC_96 = '`'; // DEC = 96 in the ASCII
     private final char CHAR_DEC_123 = '{'; // DEC = 123 in the ASCII
     private final char CHAR_DEC_126 = '~'; // DEC = 126 in the ASCII
 
-    public ValidationResult isCorrectLogin(String login) {
-        if (isEmpty(login)) {
-            return new ValidationResult(LOGIN_IS_EMPTY);
-        }
-        if (login.length() > 30) {
-            return new ValidationResult(LOGIN_IS_MORE_THAN_MAX);
-        }
-        if (hasSpecialCharacter(login)) {
-            return new ValidationResult(LOGIN_CONTAINS_SYMBOL);
+
+    public ValidationResult isCorrectPort(String port) {
+        if (!isInteger(port) || Integer.parseInt(port) < 0 || Integer.parseInt(port) > 65535) {
+            return new ValidationResult(PORT_MUST_BE);
         }
         return ValidationResult.OK;
     }
 
-    public ValidationResult isCorrectPass(String pass) {
-        if (isEmpty(pass)) {
-            return new ValidationResult(PASS_IS_EMPTY);
+    public ValidationResult isCorrectLogin(boolean isRegistration, String login) {
+        if (isEmpty(login)) {
+            return new ValidationResult(YOU_HAVE_NOT_ENTERED_LOGIN);
         }
-        if (hasSpecialCharacter(pass) && hasDigit(pass) && hasLowerCaseLetter(pass) && hasUpperCaseLetter(pass)) {
+        if (login.length() > 30) {
+            return new ValidationResult(LOGIN_OR_PASS_LESS_30_CHAR);
+        }
+        if (!isRegistration) {
             return ValidationResult.OK;
         }
-        return new ValidationResult(PASS_MESSAGE);
+        if (hasForbiddenCharacterForLogin(login)) {
+            return new ValidationResult(LOGIN_DOES_NOT_MEET_REQUIREMENTS);
+        }
+        if (hasLowerCaseLetter(login) || hasUpperCaseLetter(login) || hasDigit(login)) {
+            return ValidationResult.OK;
+        }
+        return new ValidationResult(LOGIN_DOES_NOT_MEET_REQUIREMENTS);
     }
 
-    private boolean hasSpecialCharacter(String string) {
-        char[] chars = string.toCharArray();
+    public ValidationResult isCorrectPass(boolean isRegistration, String pass) {
+        if (isEmpty(pass)) {
+            return new ValidationResult(YOU_HAVE_NOT_ENTERED_PASS);
+        }
+        if (pass.length() > 30) {
+            return new ValidationResult(LOGIN_OR_PASS_LESS_30_CHAR);
+        }
+        if (isRegistration) {
+            if (hasSpecialCharacterForPassword(pass) && hasDigit(pass) && hasLowerCaseLetter(pass) || hasUpperCaseLetter(pass)) {
+                return ValidationResult.OK;
+            } else {
+                return new ValidationResult(PASS_DOES_NOT_MEET_REQUIREMENTS);
+            }
+        }
+        return ValidationResult.OK;
+    }
+
+    private boolean hasSpecialCharacterForPassword(String password) {
+        char[] chars = password.toCharArray();
         for (char aChar : chars) {
             if (aChar >= CHAR_DEC_33 && aChar <= CHAR_DEC_47
                     || aChar >= CHAR_DEC_58 && aChar <= CHAR_DEC_64
                     || aChar >= CHAR_DEC_91 && aChar <= CHAR_DEC_96
+                    || aChar >= CHAR_DEC_123 && aChar <= CHAR_DEC_126) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasForbiddenCharacterForLogin(String login) {
+        char[] chars = login.toCharArray();
+        for (char aChar : chars) {
+            if (aChar >= CHAR_DEC_33 && aChar < CHAR_DEC_45
+                    || aChar > CHAR_DEC_45 && aChar <= CHAR_DEC_47
+                    || aChar >= CHAR_DEC_58 && aChar <= CHAR_DEC_64
+                    || aChar >= CHAR_DEC_91 && aChar < CHAR_DEC_95
+                    || aChar == CHAR_DEC_96
                     || aChar >= CHAR_DEC_123 && aChar <= CHAR_DEC_126) {
                 return true;
             }
@@ -94,14 +132,8 @@ public class ConsoleValidator {
         if (isEmpty(numberOfParticipants)) {
             return new ValidationResult(NUMBER_OF_PARTICIPANTS_IS_NULL);
         }
-        if (!isInteger(numberOfParticipants)) {
-            return new ValidationResult(NUMBER_OF_PARTICIPANTS_IS_NOT_INTEGER);
-        }
-        if (Integer.parseInt(numberOfParticipants) <= 0) {
-            return new ValidationResult(NUMBER_OF_PARTICIPANTS_LESS_THAN_ONE);
-        }
-        if (Integer.parseInt(numberOfParticipants) > 1000) {
-            return new ValidationResult(NUMBER_OF_PARTICIPANTS_MORE_THAN_MAX);
+        if (!isInteger(numberOfParticipants) || Integer.parseInt(numberOfParticipants) <= 0 || Integer.parseInt(numberOfParticipants) > 1000) {
+            return new ValidationResult(NUMBER_OF_PARTICIPANTS_SHOULD_BE);
         }
         return ValidationResult.OK;
     }
@@ -135,11 +167,8 @@ public class ConsoleValidator {
         if (isEmpty(salesBestAlbum)) {
             return new ValidationResult(BEST_ALBUM_SALES_IS_NULL);
         }
-        if (!isLong(salesBestAlbum)) {
-            return new ValidationResult(BEST_ALBUM_SALES_IS_NOT_LONG);
-        }
-        if (Long.parseLong(salesBestAlbum) <= 0) {
-            return new ValidationResult(BEST_ALBUM_SALES_LESS_THAN_ONE);
+        if (!isLong(salesBestAlbum) || Long.parseLong(salesBestAlbum) <= 0) {
+            return new ValidationResult(BEST_ALBUM_SALES_SHOULD_BE);
         }
         return ValidationResult.OK;
     }
@@ -148,11 +177,8 @@ public class ConsoleValidator {
         if (isEmpty(arg)) {
             return new ValidationResult(ARG_IS_EMPTY);
         }
-        if (!isLong(arg)) {
-            return new ValidationResult(ARG_IS_NOT_CORRECT_NUMBER);
-        }
-        if (Long.parseLong(arg) <= 0) {
-            return new ValidationResult(ARG_IS_LESS_THAN_ONE);
+        if (!isLong(arg) || Long.parseLong(arg) <= 0) {
+            return new ValidationResult(ARG_SHOULD_BE);
         }
         return ValidationResult.OK;
     }

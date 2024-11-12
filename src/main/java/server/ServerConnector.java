@@ -14,20 +14,17 @@ import java.util.Arrays;
 import static messages.ConnectionMessages.*;
 
 public class ServerConnector implements AutoCloseable {
-    private final InetAddress address;
-    private final int port;
     private final Socket socket;
     private InputStream inStream;
     private OutputStream outStream;
 
-    public ServerConnector(InetAddress address, int port) {
-        this.address = address;
-        this.port = port;
-        this.socket = new Socket();
+    public ServerConnector(Socket socket) {
+        this.socket = socket;
     }
 
-    public String connect() {
+    public String connect(String host, int port) {
         try {
+            InetAddress address = InetAddress.getByName(host);
             socket.connect(new InetSocketAddress(address, port), 10000);
             inStream = socket.getInputStream();
             outStream = socket.getOutputStream();
@@ -63,7 +60,7 @@ public class ServerConnector implements AutoCloseable {
             outStream.flush();
             return readMessage();
         } catch (IOException e) {
-            throw new ChannelClosedException(CHANNEL_CLOSED);
+            throw new ChannelClosedException(SERVER_CLOSED_THE_CONNECTION);
         }
     }
 
