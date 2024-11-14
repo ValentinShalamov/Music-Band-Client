@@ -22,11 +22,9 @@ public class ValidationMessages {
 
     public static final String YOU_HAVE_NOT_ENTERED_LOGIN = "You have not entered a login";
     public static final String YOU_HAVE_NOT_ENTERED_PASS = "You have not entered a password";
-    public static final String LOGIN_OR_PASS_LESS_30_CHAR = "The login or password must be less than 30 characters";
-    public static final String LOGIN_MUST_CONTAIN = "The login must contain at least one Latin letter or number. The login can also contain '-' and '_' characters";
-    public static final String LOGIN_DOES_NOT_MEET_REQUIREMENTS = "The login does not meet the requirements";
-    public static final String PASS_DOES_NOT_MEET_REQUIREMENTS = "The password does not meet the requirements";
-    public static final String PASS_MUST_CONTAIN = "The password must have at least one character, one Latin letter and one number";
+    public static final String LOGIN_OR_PASS_LESS_32_CHAR = "The login or password must be less than 32 characters";
+    public static final String LOGIN_MUST_CONTAIN = "The login must contain at least 6 least 6 characters long. The login can contain Latin letters, numbers or '-' and '_' characters";
+    public static final String PASS_MUST_CONTAIN = "The password must contain at least one Latin letter, one number and be at least 6 characters long";
 
     public static final String PORT_MUST_BE = "The port must be a number between 0 and 65535";
 }

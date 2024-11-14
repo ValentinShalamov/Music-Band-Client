@@ -37,18 +37,13 @@ public class ConsoleUI {
     }
 
 
-    public boolean hasConnect() throws IOException {
+    public boolean hasConnect() {
         String host = consoleReader.readHost();
         int port = consoleReader.readPort();
         showMessage(CONNECTION_WAITING);
         String response = connector.connect(host, port);
         showMessage(response);
-        if (response.startsWith(SUCCESSFUL_CONNECT)) {
-            showMessage(connector.getGreetMessage());
-            return true;
-        } else {
-            return false;
-        }
+        return response.startsWith(SUCCESSFUL_CONNECT);
     }
 
     public void scanRequests() throws IOException {

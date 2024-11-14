@@ -15,7 +15,8 @@ public class ConsoleValidator {
     private final char CHAR_DEC_96 = '`'; // DEC = 96 in the ASCII
     private final char CHAR_DEC_123 = '{'; // DEC = 123 in the ASCII
     private final char CHAR_DEC_126 = '~'; // DEC = 126 in the ASCII
-
+    private final int REQUIRED_LOGIN_LENGTH = 6;
+    private final int REQUIRED_PASSWORD_LENGTH = 6;
 
     public ValidationResult isCorrectPort(String port) {
         if (!isInteger(port) || Integer.parseInt(port) < 0 || Integer.parseInt(port) > 65535) {
@@ -28,49 +29,38 @@ public class ConsoleValidator {
         if (isEmpty(login)) {
             return new ValidationResult(YOU_HAVE_NOT_ENTERED_LOGIN);
         }
-        if (login.length() > 30) {
-            return new ValidationResult(LOGIN_OR_PASS_LESS_30_CHAR);
+        if (login.length() > 32) {
+            return new ValidationResult(LOGIN_OR_PASS_LESS_32_CHAR);
         }
         if (!isRegistration) {
             return ValidationResult.OK;
         }
-        if (hasForbiddenCharacterForLogin(login)) {
-            return new ValidationResult(LOGIN_DOES_NOT_MEET_REQUIREMENTS);
+        if (login.length() < REQUIRED_LOGIN_LENGTH || hasForbiddenCharacterForLogin(login)) {
+            return new ValidationResult(LOGIN_MUST_CONTAIN);
         }
         if (hasLowerCaseLetter(login) || hasUpperCaseLetter(login) || hasDigit(login)) {
             return ValidationResult.OK;
         }
-        return new ValidationResult(LOGIN_DOES_NOT_MEET_REQUIREMENTS);
+        return new ValidationResult(LOGIN_MUST_CONTAIN);
     }
 
     public ValidationResult isCorrectPass(boolean isRegistration, String pass) {
         if (isEmpty(pass)) {
             return new ValidationResult(YOU_HAVE_NOT_ENTERED_PASS);
         }
-        if (pass.length() > 30) {
-            return new ValidationResult(LOGIN_OR_PASS_LESS_30_CHAR);
+        if (pass.length() > 32) {
+            return new ValidationResult(LOGIN_OR_PASS_LESS_32_CHAR);
         }
         if (isRegistration) {
-            if (hasSpecialCharacterForPassword(pass) && hasDigit(pass) && hasLowerCaseLetter(pass) || hasUpperCaseLetter(pass)) {
+            if (pass.length() >= REQUIRED_PASSWORD_LENGTH
+                    && hasDigit(pass)
+                    && hasLowerCaseLetter(pass) || hasUpperCaseLetter(pass)) {
                 return ValidationResult.OK;
             } else {
-                return new ValidationResult(PASS_DOES_NOT_MEET_REQUIREMENTS);
+                return new ValidationResult(PASS_MUST_CONTAIN);
             }
         }
         return ValidationResult.OK;
-    }
-
-    private boolean hasSpecialCharacterForPassword(String password) {
-        char[] chars = password.toCharArray();
-        for (char aChar : chars) {
-            if (aChar >= CHAR_DEC_33 && aChar <= CHAR_DEC_47
-                    || aChar >= CHAR_DEC_58 && aChar <= CHAR_DEC_64
-                    || aChar >= CHAR_DEC_91 && aChar <= CHAR_DEC_96
-                    || aChar >= CHAR_DEC_123 && aChar <= CHAR_DEC_126) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean hasForbiddenCharacterForLogin(String login) {

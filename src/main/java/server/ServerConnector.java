@@ -64,10 +64,6 @@ public class ServerConnector implements AutoCloseable {
         }
     }
 
-    public String getGreetMessage() throws IOException {
-        return readMessage();
-    }
-
     @Override
     public void close() throws Exception {
         try {

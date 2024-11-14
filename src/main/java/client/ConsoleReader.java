@@ -15,8 +15,6 @@ import static messages.ConnectionMessages.YOU_HAVE_SELECTED_HOST;
 import static messages.ConnectionMessages.YOU_HAVE_SELECTED_PORT;
 import static messages.ResultMessages.INTERRUPT_MESSAGE;
 import static messages.UserMessages.*;
-import static messages.ValidationMessages.LOGIN_MUST_CONTAIN;
-import static messages.ValidationMessages.PASS_MUST_CONTAIN;
 import static util.DefaultValues.DEFAULT_HOST;
 import static util.DefaultValues.DEFAULT_PORT;
 
@@ -80,12 +78,14 @@ public class ConsoleReader {
     private String readLogin(boolean isRegistration) {
         ValidationResult validationResult = new ValidationResult("");
         String login = "";
-        if (isRegistration) showMessage(LOGIN_MUST_CONTAIN);
         while (!validationResult.isValid()) {
             showMessage(ENTER_LOGIN);
             login = readRequest();
             validationResult = consoleValidator.isCorrectLogin(isRegistration, login);
             printIfNotCorrect(validationResult);
+        }
+        if (isRegistration) {
+            showMessage(LOGIN_PASSED_REQUIREMENTS);
         }
         return login;
     }
@@ -93,14 +93,29 @@ public class ConsoleReader {
     private String readPass(boolean isRegistration) {
         ValidationResult validationResult = new ValidationResult("");
         String pass = "";
-        if (isRegistration) showMessage(PASS_MUST_CONTAIN);
+        showMessage(INVISIBLE_CHARACTERS);
         while (!validationResult.isValid()) {
             showMessage(ENTER_PASS);
-            pass = readRequest();
+            pass = readPassword();
             validationResult = consoleValidator.isCorrectPass(isRegistration, pass);
             printIfNotCorrect(validationResult);
         }
+        if (isRegistration) {
+            showMessage(PASSWORD_PASSED_REQUIREMENTS);
+        }
         return pass;
+    }
+
+    private void checkInterruptAttempt(String string) {
+        if (string.equalsIgnoreCase("q")) {
+            throw new UserCancelledOperationException(INTERRUPT_MESSAGE);
+        }
+    }
+
+    private String readPassword() {
+        String s = new String(System.console().readPassword());
+        checkInterruptAttempt(s);
+        return s;
     }
 
     public String readRequest() {
@@ -108,11 +123,8 @@ public class ConsoleReader {
             return "exit";
         }
         String string = consoleScanner.nextLine().trim();
-        if (!string.equalsIgnoreCase("q")) {
-            return string;
-        } else {
-            throw new UserCancelledOperationException(INTERRUPT_MESSAGE);
-        }
+        checkInterruptAttempt(string);
+        return string;
     }
 
     public MusicBand createBand() {
