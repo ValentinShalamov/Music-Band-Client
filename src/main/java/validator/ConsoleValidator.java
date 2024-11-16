@@ -5,18 +5,8 @@ import music.MusicGenre;
 import static messages.ValidationMessages.*;
 
 public class ConsoleValidator {
-    private final char CHAR_DEC_33 = '!'; // DEC = 33 in the ASCII
-    private final char CHAR_DEC_45 = '-'; // DEC = 45 in the ASCII
-    private final char CHAR_DEC_47 = '/'; // DEC = 47 in the ASCII
-    private final char CHAR_DEC_58 = ':'; // DEC = 58 in the ASCII
-    private final char CHAR_DEC_64 = '@'; // DEC = 64 in the ASCII
-    private final char CHAR_DEC_91 = '['; // DEC = 91 in the ASCII
-    private final char CHAR_DEC_95 = '_'; // DEC = 95 in the ASCII
-    private final char CHAR_DEC_96 = '`'; // DEC = 96 in the ASCII
-    private final char CHAR_DEC_123 = '{'; // DEC = 123 in the ASCII
-    private final char CHAR_DEC_126 = '~'; // DEC = 126 in the ASCII
-    private final int REQUIRED_LOGIN_LENGTH = 6;
-    private final int REQUIRED_PASSWORD_LENGTH = 6;
+    private final int MIN_LOGIN_LENGTH = 4;
+    private final int MIN_PASSWORD_LENGTH = 6;
     private final int MAX_LOGIN_LENGTH = 32;
     private final int MAX_PASSWORD_LENGTH = 32;
 
@@ -37,13 +27,13 @@ public class ConsoleValidator {
         if (!isRegistration) {
             return ValidationResult.OK;
         }
-        if (login.length() < REQUIRED_LOGIN_LENGTH || hasForbiddenCharacterForLogin(login)) {
-            return new ValidationResult(String.format(LOGIN_MUST_CONTAIN, REQUIRED_LOGIN_LENGTH));
+        if (login.length() < MIN_LOGIN_LENGTH) {
+            return new ValidationResult(String.format(LOGIN_MUST_CONTAIN, MIN_LOGIN_LENGTH));
         }
-        if (hasLowerCaseLetter(login) || hasUpperCaseLetter(login) || hasDigit(login)) {
+        if (hasDigit(login) || hasLowerCaseLetter(login) && !hasForbiddenCharacterForLogin(login)) {
             return ValidationResult.OK;
         }
-        return new ValidationResult(String.format(LOGIN_MUST_CONTAIN, REQUIRED_LOGIN_LENGTH));
+        return new ValidationResult(String.format(LOGIN_MUST_CONTAIN, MIN_LOGIN_LENGTH));
     }
 
     public ValidationResult isCorrectPass(boolean isRegistration, String pass) {
@@ -54,12 +44,12 @@ public class ConsoleValidator {
             return new ValidationResult(String.format(PASS_MUST_BE_LESS_THAN, MAX_PASSWORD_LENGTH));
         }
         if (isRegistration) {
-            if (pass.length() >= REQUIRED_PASSWORD_LENGTH
+            if (pass.length() >= MIN_PASSWORD_LENGTH
                     && hasDigit(pass)
                     && hasLowerCaseLetter(pass) || hasUpperCaseLetter(pass)) {
                 return ValidationResult.OK;
             } else {
-                return new ValidationResult(String.format(PASS_MUST_CONTAIN, REQUIRED_PASSWORD_LENGTH));
+                return new ValidationResult(String.format(PASS_MUST_CONTAIN, MIN_PASSWORD_LENGTH));
             }
         }
         return ValidationResult.OK;
@@ -67,13 +57,9 @@ public class ConsoleValidator {
 
     private boolean hasForbiddenCharacterForLogin(String login) {
         char[] chars = login.toCharArray();
+
         for (char aChar : chars) {
-            if (aChar >= CHAR_DEC_33 && aChar < CHAR_DEC_45
-                    || aChar > CHAR_DEC_45 && aChar <= CHAR_DEC_47
-                    || aChar >= CHAR_DEC_58 && aChar <= CHAR_DEC_64
-                    || aChar >= CHAR_DEC_91 && aChar < CHAR_DEC_95
-                    || aChar == CHAR_DEC_96
-                    || aChar >= CHAR_DEC_123 && aChar <= CHAR_DEC_126) {
+            if (!(aChar >= 'a' && aChar <= 'z' || aChar >= '0' && aChar <= '9' || aChar == '-' || aChar == '_')) {
                 return true;
             }
         }

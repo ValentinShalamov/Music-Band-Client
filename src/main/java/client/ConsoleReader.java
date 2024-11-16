@@ -9,6 +9,7 @@ import music.MusicGenre;
 import validator.ConsoleValidator;
 import validator.ValidationResult;
 
+import java.io.Console;
 import java.util.Scanner;
 
 import static messages.ConnectionMessages.YOU_HAVE_SELECTED_HOST;
@@ -46,7 +47,7 @@ public class ConsoleReader {
     }
 
     public String readHost() {
-        showMessage(String.format(ENTER_HOST_ADDRESS,DEFAULT_HOST));
+        showMessage(String.format(ENTER_HOST_ADDRESS, DEFAULT_HOST));
         String host = readRequest();
         if (host.trim().isEmpty()) {
             showMessage(YOU_HAVE_SELECTED_HOST + DEFAULT_HOST + "\n");
@@ -113,9 +114,14 @@ public class ConsoleReader {
     }
 
     private String readPassword() {
-        String s = new String(System.console().readPassword());
-        checkInterruptAttempt(s);
-        return s;
+        Console console = System.console();
+        if (console == null) {
+            return readRequest();
+        } else {
+            String password = new String(console.readPassword());
+            checkInterruptAttempt(password);
+            return password;
+        }
     }
 
     public String readRequest() {
