@@ -59,22 +59,22 @@ public class ScriptManager {
                         id = command.split(" ", 2)[1];
                         parser.parseId(id);
                         scriptResult.addCommand(new Command("update", serializer.serializeMusicBand(musicBand), id));
-                    } else if (command.startsWith("remove")) {
-                        id = command.split(" ", 2)[1];
-                        parser.parseId(id);
-                        scriptResult.addCommand(new Command("remove", id));
                     } else if (command.startsWith("remove_lower")) {
                         String sales = command.split(" ", 2)[1];
                         parser.parseSales(sales);
                         scriptResult.addCommand(new Command("remove_lower", sales));
+                    } else if (command.startsWith("remove")) {
+                        id = command.split(" ", 2)[1];
+                        parser.parseId(id);
+                        scriptResult.addCommand(new Command("remove", id));
                     } else if (command.startsWith("filter")) {
                         String sales = command.split(" ",2)[1];
                         parser.parseSales(sales);
                         scriptResult.addCommand(new Command("filter", sales));
                     } else {
                         switch (command) {
-                            case "help", "info", "show", "clear", "history", "show_min",
-                                 "print_asc", "print_desc" -> scriptResult.addCommand(new Command(command));
+                            case "help", "info", "show", "show_mine", "clear", "history", "history_clear", "show_min",
+                                 "print_asc", "print_desc", "exit" -> scriptResult.addCommand(new Command(command));
 
                             case "add", "add_if_min" -> {
                                 musicBand = parser.createBand(fileScanner);

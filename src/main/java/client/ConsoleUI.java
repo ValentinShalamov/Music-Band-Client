@@ -81,6 +81,9 @@ public class ConsoleUI {
                             if (errorMessages.isEmpty()) {
                                 while (!commands.isEmpty()) {
                                     command = commands.poll();
+                                    if (command.getName().equals("exit")) {
+                                        System.exit(0);
+                                    }
                                     showMessage(connector.sendRequest(serializer.serializeCommand(command)));
                                 }
                             }

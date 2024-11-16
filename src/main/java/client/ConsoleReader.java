@@ -46,7 +46,7 @@ public class ConsoleReader {
     }
 
     public String readHost() {
-        showMessage(ENTER_HOST_ADDRESS);
+        showMessage(String.format(ENTER_HOST_ADDRESS,DEFAULT_HOST));
         String host = readRequest();
         if (host.trim().isEmpty()) {
             showMessage(YOU_HAVE_SELECTED_HOST + DEFAULT_HOST + "\n");
@@ -61,7 +61,7 @@ public class ConsoleReader {
         String port = "";
 
         while (!validationResult.isValid()) {
-            showMessage(ENTER_PORT_NUMBER);
+            showMessage(String.format(ENTER_PORT_NUMBER, DEFAULT_PORT));
             port = readRequest();
             if (port.trim().isEmpty()) {
                 showMessage(YOU_HAVE_SELECTED_PORT + DEFAULT_PORT + "\n");

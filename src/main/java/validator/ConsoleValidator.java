@@ -6,17 +6,19 @@ import static messages.ValidationMessages.*;
 
 public class ConsoleValidator {
     private final char CHAR_DEC_33 = '!'; // DEC = 33 in the ASCII
-    private final char CHAR_DEC_45 = '-';
+    private final char CHAR_DEC_45 = '-'; // DEC = 45 in the ASCII
     private final char CHAR_DEC_47 = '/'; // DEC = 47 in the ASCII
     private final char CHAR_DEC_58 = ':'; // DEC = 58 in the ASCII
     private final char CHAR_DEC_64 = '@'; // DEC = 64 in the ASCII
     private final char CHAR_DEC_91 = '['; // DEC = 91 in the ASCII
-    private final char CHAR_DEC_95 = '_';
+    private final char CHAR_DEC_95 = '_'; // DEC = 95 in the ASCII
     private final char CHAR_DEC_96 = '`'; // DEC = 96 in the ASCII
     private final char CHAR_DEC_123 = '{'; // DEC = 123 in the ASCII
     private final char CHAR_DEC_126 = '~'; // DEC = 126 in the ASCII
     private final int REQUIRED_LOGIN_LENGTH = 6;
     private final int REQUIRED_PASSWORD_LENGTH = 6;
+    private final int MAX_LOGIN_LENGTH = 32;
+    private final int MAX_PASSWORD_LENGTH = 32;
 
     public ValidationResult isCorrectPort(String port) {
         if (!isInteger(port) || Integer.parseInt(port) < 0 || Integer.parseInt(port) > 65535) {
@@ -29,27 +31,27 @@ public class ConsoleValidator {
         if (isEmpty(login)) {
             return new ValidationResult(YOU_HAVE_NOT_ENTERED_LOGIN);
         }
-        if (login.length() > 32) {
-            return new ValidationResult(LOGIN_OR_PASS_LESS_32_CHAR);
+        if (login.length() > MAX_LOGIN_LENGTH) {
+            return new ValidationResult(String.format(LOGIN_MUST_BE_LESS_THAN, MAX_LOGIN_LENGTH));
         }
         if (!isRegistration) {
             return ValidationResult.OK;
         }
         if (login.length() < REQUIRED_LOGIN_LENGTH || hasForbiddenCharacterForLogin(login)) {
-            return new ValidationResult(LOGIN_MUST_CONTAIN);
+            return new ValidationResult(String.format(LOGIN_MUST_CONTAIN, REQUIRED_LOGIN_LENGTH));
         }
         if (hasLowerCaseLetter(login) || hasUpperCaseLetter(login) || hasDigit(login)) {
             return ValidationResult.OK;
         }
-        return new ValidationResult(LOGIN_MUST_CONTAIN);
+        return new ValidationResult(String.format(LOGIN_MUST_CONTAIN, REQUIRED_LOGIN_LENGTH));
     }
 
     public ValidationResult isCorrectPass(boolean isRegistration, String pass) {
         if (isEmpty(pass)) {
             return new ValidationResult(YOU_HAVE_NOT_ENTERED_PASS);
         }
-        if (pass.length() > 32) {
-            return new ValidationResult(LOGIN_OR_PASS_LESS_32_CHAR);
+        if (pass.length() > MAX_PASSWORD_LENGTH) {
+            return new ValidationResult(String.format(PASS_MUST_BE_LESS_THAN, MAX_PASSWORD_LENGTH));
         }
         if (isRegistration) {
             if (pass.length() >= REQUIRED_PASSWORD_LENGTH
@@ -57,7 +59,7 @@ public class ConsoleValidator {
                     && hasLowerCaseLetter(pass) || hasUpperCaseLetter(pass)) {
                 return ValidationResult.OK;
             } else {
-                return new ValidationResult(PASS_MUST_CONTAIN);
+                return new ValidationResult(String.format(PASS_MUST_CONTAIN, REQUIRED_PASSWORD_LENGTH));
             }
         }
         return ValidationResult.OK;

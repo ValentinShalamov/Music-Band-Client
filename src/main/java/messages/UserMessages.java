@@ -15,8 +15,8 @@ public class UserMessages {
     public static final String LOGIN_PASSED_REQUIREMENTS = "The login passed the requirements \n";
     public static final String PASSWORD_PASSED_REQUIREMENTS = "The password passed the requirements \n";
     public static final String INTERRUPT = "To interrupt any input data, use 'q'";
-    public static final String ENTER_HOST_ADDRESS = "Enter the host address or use the default one by pressing 'Enter'[193.124.115.131]";
-    public static final String ENTER_PORT_NUMBER = "Enter the port number or use the default one by pressing 'Enter'[8888]";
+    public static final String ENTER_HOST_ADDRESS = "Enter the host address or use the default one by pressing 'Enter' [%s]";
+    public static final String ENTER_PORT_NUMBER = "Enter the port number or use the default one by pressing 'Enter' [%d]";
 
     public static final String ENTER_THE_GENRE_OF_MUSIC =
             "You need to select a music genre, to do this enter the genre number : \n" +
