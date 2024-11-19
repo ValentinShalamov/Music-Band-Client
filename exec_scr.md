@@ -1,11 +1,12 @@
 
-# How to work with `execute_script`
+# Как работать с `execute_script`
 Команда `execute_script` поддерживает все команды с интерактивного режима.
 
 **Этапы работы:**
 
 Подготовьте файл для скрипта - пропишите в файле последовательно на отдельных строках нужные команды
 ```bash
+
   help
 
   info
@@ -81,11 +82,11 @@ math_rock
   Command: add_if_min Error message: The number of participants can be from 1 to 1000 
 ```
 
-## Related
-[Сервер](https://github.com/matiassingers/awesome-readme)
+## Связанные проекты
+[Сервер](https://github.com/ValentinShalamov/Music-Band-Server)
 
-[Клиент](https://github.com/matiassingers/awesome-readme)
+[Клиент](https://github.com/ValentinShalamov/Music-Band-Client)
 
-## Support
+## Данные для связи
 
 Email для связи: valentin98shalamov@gmail.com
