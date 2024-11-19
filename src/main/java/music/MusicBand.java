@@ -42,8 +42,8 @@ public class MusicBand implements Comparable<MusicBand> {
     @Override
     public String toString() {
         return String.format("id = %d, name is %s, time creation is %s, " +
-                "number of participants = %d, establishment date is %s, " +
-                "genre is %s, the best album is %s, count sales of the best album = %d \n",
+                        "number of participants = %d, establishment date is %s, " +
+                        "genre is %s, the best album is %s, count sales of the best album = %d \n",
                 id, name, creationDate.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")), numberOfParticipants, establishmentDate, genre,
                 bestAlbum.name(), bestAlbum.sales());
     }

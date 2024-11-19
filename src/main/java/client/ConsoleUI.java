@@ -14,7 +14,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import static messages.ConnectionMessages.SUCCESSFUL_CONNECT;
-import static messages.ConnectionMessages.WAITING_CONNECTION;
+import static messages.ConnectionMessages.CONNECTION_WAITING;
 import static messages.ResultMessages.AUTHORIZATION_SUCCESSFUL;
 import static messages.UserMessages.ENTER_COMMAND;
 
@@ -37,16 +37,13 @@ public class ConsoleUI {
     }
 
 
-    public boolean hasConnect() throws IOException {
-        showMessage(WAITING_CONNECTION);
-        String response = connector.connect();
+    public boolean hasConnect() {
+        String host = consoleReader.readHost();
+        int port = consoleReader.readPort();
+        showMessage(CONNECTION_WAITING);
+        String response = connector.connect(host, port);
         showMessage(response);
-        if (response.startsWith(SUCCESSFUL_CONNECT)) {
-            showMessage(connector.getGreetMessage());
-            return true;
-        } else {
-            return false;
-        }
+        return response.startsWith(SUCCESSFUL_CONNECT);
     }
 
     public void scanRequests() throws IOException {
@@ -84,6 +81,9 @@ public class ConsoleUI {
                             if (errorMessages.isEmpty()) {
                                 while (!commands.isEmpty()) {
                                     command = commands.poll();
+                                    if (command.getName().equals("exit")) {
+                                        return;
+                                    }
                                     showMessage(connector.sendRequest(serializer.serializeCommand(command)));
                                 }
                             }

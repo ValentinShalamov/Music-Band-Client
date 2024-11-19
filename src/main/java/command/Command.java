@@ -22,4 +22,8 @@ public class Command {
         this.firstArg = firstArg;
         this.secondArg = secondArg;
     }
+
+    public String getName() {
+        return name;
+    }
 }

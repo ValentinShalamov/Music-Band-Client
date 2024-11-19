@@ -31,7 +31,7 @@ public class ScriptManager {
             return scriptResult;
         } catch (IOException e) {
             ScriptResult scriptResult = new ScriptResult();
-            scriptResult.addErrorMessages(FILE_READER_MISTAKE);
+            scriptResult.addErrorMessages(READ_ERROR);
             return scriptResult;
         } catch (SecurityException | EmptyFileException e) {
             ScriptResult scriptResult = new ScriptResult();
@@ -59,22 +59,22 @@ public class ScriptManager {
                         id = command.split(" ", 2)[1];
                         parser.parseId(id);
                         scriptResult.addCommand(new Command("update", serializer.serializeMusicBand(musicBand), id));
-                    } else if (command.startsWith("remove")) {
-                        id = command.split(" ", 2)[1];
-                        parser.parseId(id);
-                        scriptResult.addCommand(new Command("remove", id));
                     } else if (command.startsWith("remove_lower")) {
                         String sales = command.split(" ", 2)[1];
                         parser.parseSales(sales);
                         scriptResult.addCommand(new Command("remove_lower", sales));
-                    } else if (command.startsWith("filter_by_best_album")) {
+                    } else if (command.startsWith("remove")) {
+                        id = command.split(" ", 2)[1];
+                        parser.parseId(id);
+                        scriptResult.addCommand(new Command("remove", id));
+                    } else if (command.startsWith("filter")) {
                         String sales = command.split(" ",2)[1];
                         parser.parseSales(sales);
-                        scriptResult.addCommand(new Command("filter_by_best_album", sales));
+                        scriptResult.addCommand(new Command("filter", sales));
                     } else {
                         switch (command) {
-                            case "help", "info", "show", "clear", "history", "min_by_best_album",
-                                 "print_field_asc_best_album" -> scriptResult.addCommand(new Command(command));
+                            case "help", "info", "show", "show_mine", "clear", "history", "history_clear", "show_min",
+                                 "print_asc", "print_desc", "exit" -> scriptResult.addCommand(new Command(command));
 
                             case "add", "add_if_min" -> {
                                 musicBand = parser.createBand(fileScanner);
